@@ -9,7 +9,7 @@ function visitEl(el: XmlElement | Und): Unk {
     return null;
   }
   const attrs = el.attributes ?? {};
-  const els = el.elements ?? [];
+  const els = el.elements?.filter(e => e.type !== 'comment') ?? [];
   switch (el.type) {
     case 'text':
       return <BodySpan>{
@@ -65,7 +65,7 @@ function visitEl(el: XmlElement | Und): Unk {
           return <BodySpan>{
             format: BodySpanFormat.emphasized,
             kind: BodyElementKind.span,
-            text: el.text?.toString() ?? '',
+            text: (visitEl(el.elements![0]) as BodySpan).text,
           };
         case 'inline':
           return <BodyMediaBox<true>>{

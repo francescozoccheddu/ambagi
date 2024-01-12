@@ -1,9 +1,60 @@
+mixin run(children)
+  each ch in children
+    case ch.kind
+      when "span"
+        case ch.format
+          when "normal"
+            span #{ch.text}
+          when "emphasized"
+            emph #{ch.text}
+      when "footnoteLink"
+        - const idx = body.footnotes.findIndex(fn => fn.key === ch.key)
+        a.footnote-link(tabIndex=-1 id=`fnl-${idx}` href=`fn-${idx}` data-index=idx)
+          sup #{idx}
+
+mixin paragraph(paragraph)
+  case paragraph.format
+    when "normal"
+      p
+        +run(paragraph.children)
+    when "quote"
+      blockquote
+        +run(paragraph.children)
+
+mixin element(element)
+  case element.kind
+    when "paragraph"
+      +paragraph(element)
+
 doctype html
-html(lang="en")
+html(lang= language)
   head
-    title= title
+    title #{siteConf.title}: #{pageConf.title}
+    meta(name="description" content=pageConf.description || siteConf.description)
+    meta(name="keywords" content=[...pageConf.keywords, ...siteConf.keywords].join(", "))
+    meta(name="author" content=siteConf.author)
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(name="robots" content=(siteConf.allowRobots && pageConf.allowRobots ? "nofollow, noarchive, nositelinkssearchbox, notranslate" : "none"))
   body
-    h1 Pug - node template engine
-    #container.col
-      Pug is a terse and simple templating language with a
-      strong focus on performance and powerful features.
+    main
+      section.header
+        h1.logo #{siteConf.title}
+        h2.title #{pageConf.title}
+      section.body
+        each el in body.main
+          +element(el)
+      if body.footnotes.length > 0
+        section.footnotes
+          each fn, idx in body.footnotes
+            .footnote(data-index=idx id=`fn-${idx}`)
+              .footnote-head
+                a.footnote-rlink(tabindex=-1 href=`#fnl-${idx}` data-index=idx)
+                  sup #{idx}
+              .footnote-body
+                +element(fn.child)
+      if body.credits.length > 0
+        section.credits
+          each cr in body.credits
+            .credit
+              +run(cr)
+      section.author #{siteConf.author}

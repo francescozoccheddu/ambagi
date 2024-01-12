@@ -27,7 +27,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
   const pageConf = pageConfLoader(path.join(dir, 'page.yml'));
   const bodyDef = bodyLoader(path.join(dir, 'body.xml'));
   const maxImageSize = buildConf.siteConf.maxImageSize ?? { width: 2000, height: 2000 };
-  const body = processBodyDef(bodyDef, {
+  const body = await processBodyDef(bodyDef, {
     async processImage(def) {
       const file = path.join(assetsDir, def.sources.uri);
       const images = await buildImage(file, {
@@ -98,7 +98,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
     emitData(fonts.woff, urls.woffUrl);
     emitData(fonts.woff2, urls.woff2Url);
   }
-  emitData(html, pageConf.url);
+  emitData(html, `${pageConf.url}.html`);
   return {
     allowRobots: pageConf.allowRobots ?? false,
     url: pageConf.url,
