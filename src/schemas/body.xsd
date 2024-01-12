@@ -22,11 +22,20 @@
                     <xs:element name="video" type="am:video" />
                     <xs:element name="image" type="am:image" />
                   </xs:choice>
-                  <xs:attribute name="position" use="required">
+                  <xs:attribute name="float" use="required">
                     <xs:simpleType>
                       <xs:restriction base="xs:string">
                         <xs:enumeration value="left" />
                         <xs:enumeration value="right" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="offset" use="optional" default="center">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="left" />
+                        <xs:enumeration value="right" />
+                        <xs:enumeration value="center" />
                       </xs:restriction>
                     </xs:simpleType>
                   </xs:attribute>

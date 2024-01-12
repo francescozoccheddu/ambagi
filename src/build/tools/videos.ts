@@ -1,4 +1,4 @@
-import { isMany, isSingle, nonNulOrUnd } from '@francescozoccheddu/ts-goodies/arrays';
+import { isMany, isSingle } from '@francescozoccheddu/ts-goodies/arrays';
 import { cerr, err } from '@francescozoccheddu/ts-goodies/errors';
 import { BodyVideoSourceInfo } from 'ambagi/pipeline/body';
 import ffmpegPath from 'ffmpeg-static';
@@ -71,7 +71,7 @@ export async function getVideoInfo(videoFileOrUrl: Str): Promise<BodyVideoSource
         const audio = audioStreams[0] ?? null;
         resolve({
           size: data.format.size!,
-          type: `video/${getVideoBaseMimeType(data.format.format_name ?? null)}; codecs="${nonNulOrUnd([video.codec_name, audio?.codec_name]).join(', ')}"`,
+          type: `video/${getVideoBaseMimeType(data.format.format_name ?? null)}`, // TODO: RFC6831
           width: video.width!,
           height: video.height!,
           audio: audio !== null,

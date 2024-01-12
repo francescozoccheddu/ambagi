@@ -62,14 +62,21 @@ export type BodyParagraph = R<{
   format: BodyParagraphFormat;
 }> & Kind<BodyElementKind.paragraph>
 
-export enum BodyMediaBoxLocation {
+export enum BodyMediaBoxFloat {
   left = 'left',
+  right = 'right'
+}
+
+export enum BodyMediaBoxOffset {
+  left = 'left',
+  center = 'center',
   right = 'right'
 }
 
 export type BodyMediaBox<TIsDef extends Bool = false> = R<{
   child: BodyMedia<TIsDef>;
-  location: BodyMediaBoxLocation;
+  float: BodyMediaBoxFloat;
+  offset: BodyMediaBoxOffset;
 }> & Kind<BodyElementKind.mediaBox>
 
 type BodyMediaBase = R<{

@@ -1,3 +1,5 @@
+doctype html
+
 mixin run(children)
   each ch in children
     case ch.kind
@@ -22,13 +24,45 @@ mixin paragraph(paragraph)
       blockquote
         +run(paragraph.children)
 
+mixin img(sources, alt)
+  - function onerror(fallbacks) {
+  -   if (fallbacks.length === 0) return "";
+  -   return `this.onerror=function(){${onerror(fallbacks.slice(1))}};this.src='${fallbacks[0].uri}';this.width=${fallbacks[0].info.width};this.height=${fallbacks[0].info.height};`
+  - }
+  img(src=sources[0].uri onerror=onerror(sources.slice(1)) alt=(alt || '') loading='lazy' width=sources[0].info.width height=sources[0].info.height)
+
+
+mixin media(element)
+  case element.kind
+    when "video"
+      figure
+        video(width=element.sources[0].width height=element.sources[0].height muted=!element.sources[0].audio controls=element.manual autoplay=!element.manual playsinline=!element.manual disablepictureinpicture loop=!element.manual poster=element.thumbnails[0].uri)
+          each src in element.sources
+            source(src=src.uri type=src.info.type)
+        if element.caption
+          figcaption 
+            +run(element.caption)
+    when "image"
+      figure
+        +img(element.sources, element.alt)
+        if element.caption
+          figcaption 
+            +run(element.caption)
+
+
 mixin element(element)
   case element.kind
     when "paragraph"
       +paragraph(element)
+    when "mediaBox"
+      .inline(data-float=element.float data-offset=element.offset)
+        +media(element.child)
+    when "video"
+    when "image"
+      +media(element)
 
-doctype html
-html(lang= siteConf.language)
+
+html(lang=siteConf.language)
   head
     title #{siteConf.title}: #{pageConf.title}
     meta(name="description" content=pageConf.description || siteConf.description)
@@ -48,8 +82,21 @@ html(lang= siteConf.language)
         |   font-weight: 400;
         | }
     style #{res.styles.main.inline}
+    noscript 
+      style
+        | body &gt; main {
+        |   display: block !important;
+        |   animation-play-state: running;
+        |   animation-delay: 0ms;  
+        | }
+        | #loading {
+        |   display: none;
+        | }
   body
-    main
+    #loading
+      #loading-content
+        | !{res.icons.loading.inline}
+    main(style={display: none})
       section.header
         h1.logo #{text("logo", siteConf.title.toLowerCase())}
         h2.title #{text("head", pageConf.title)}
@@ -72,3 +119,4 @@ html(lang= siteConf.language)
             .credit
               +run(cr)
       section.author #{text("logo", siteConf.author)}
+  script(src=res.scripts.main.url)

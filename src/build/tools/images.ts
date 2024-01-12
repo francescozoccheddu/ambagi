@@ -32,9 +32,11 @@ export async function buildImage(imageFileOrData: Str | Buffer, options: ImageOp
         quality: 70,
         effort: 10,
         compressionLevel: dev ? 2 : 9,
+        progressive: true,
       }),
       img.jpeg({
         quality: 70,
+        progressive: true,
       }),
     ]),
   ];
