@@ -36,6 +36,7 @@ html(lang= language)
     meta(name="author" content=siteConf.author)
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     meta(name="robots" content=(siteConf.allowRobots && pageConf.allowRobots ? "nofollow, noarchive, nositelinkssearchbox, notranslate" : "none"))
+    | !{faviconHtml}
     style
       each fontKey in ["logo", "head", "bodyNorm", "bodyEmph"]
         - const font = res.fonts[fontKey]

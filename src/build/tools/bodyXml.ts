@@ -4,6 +4,13 @@ import { isUnd } from '@francescozoccheddu/ts-goodies/types';
 import { Body, BodyCredit, BodyElementKind, BodyFootnote, BodyFootnoteLink, BodyImage, BodyMediaBox, BodyMediaSource, BodyMediaSourceInfo, BodyParagraph, BodyParagraphFormat, BodySpan, BodySpanFormat, BodyVideo } from 'ambagi/pipeline/body';
 import { Element as XmlElement } from 'xml-js';
 
+function toFloatOrNul(str: Str | Nul): Num | Nul {
+  if (!str) {
+    return null;
+  }
+  return Number.parseFloat(str);
+}
+
 function visitEl(el: XmlElement | Und): Unk {
   if (isUnd(el)) {
     return null;
@@ -44,8 +51,9 @@ function visitEl(el: XmlElement | Und): Unk {
             audio: attrs['audio'] === 'true',
             manual: attrs['manual'] === 'true',
             sources: els.filter(e => e.name === 'source').map(visitEl),
-            caption: visitEl(els.filter(e => e.name === 'caption')[0]),
-            thumbnail: attrs['thumbnail']?.toString() ?? null,
+            caption: (visitEl(els.filter(e => e.name === 'caption')[0]) as BodyParagraph).children,
+            thumbnails: attrs['thumbnail']?.toString() ?? null,
+            thumbnailTime: toFloatOrNul(attrs['thumbnailTime']?.toString() ?? null),
           };
         case 'image':
           return <BodyImage<true>>{
@@ -53,6 +61,7 @@ function visitEl(el: XmlElement | Und): Unk {
             sources: els.filter(e => e.name === 'source').map(visitEl)[0],
             caption: visitEl(els.filter(e => e.name === 'caption')[0]),
           };
+        case 'caption':
         case 'text':
         case 'paragraph':
         case 'quote':
@@ -80,7 +89,7 @@ function visitEl(el: XmlElement | Und): Unk {
           };
         case 'source': {
           return <BodyMediaSource<BodyMediaSourceInfo, true>>{
-            uri: attrs['uri']?.toString() ?? '',
+            uri: attrs['asset']?.toString() ?? '',
             info: undefined,
           };
         }

@@ -31,9 +31,9 @@ export async function buildSite(): Promise<void> {
     emitData(file.data, file.path);
   }
   const fonts: RStrObj<Buffer> = mapValues(siteConf.resources.fonts, f => fs.readFileSync(path.join(dirs.fonts, f)));
-  const icons: RStrObj<PageResource> = mapValues(siteConf.resources.icons, f => new PageResource(buildIcon(path.join(dirs.icons, f)), 'image/svg+xml', '.svg'));
-  const scripts: RStrObj<PageResource> = await mapValuesAsync(siteConf.resources.scripts, async f => new PageResource(await buildScript(path.join(dirs.scripts, f)), 'text/javascript', '.js'));
-  const styles: RStrObj<PageResource> = await mapValuesAsync(siteConf.resources.styles, async f => new PageResource(await buildStyle(path.join(dirs.styles, f)), 'text/css', '.css'));
+  const icons: RStrObj<PageResource> = mapValues(siteConf.resources.icons, f => new PageResource(buildIcon(path.join(dirs.icons, f)), 'image/svg+xml'));
+  const scripts: RStrObj<PageResource> = await mapValuesAsync(siteConf.resources.scripts, async f => new PageResource(await buildScript(path.join(dirs.scripts, f)), 'text/javascript'));
+  const styles: RStrObj<PageResource> = await mapValuesAsync(siteConf.resources.styles, async f => new PageResource(await buildStyle(path.join(dirs.styles, f)), 'text/css'));
   const buildPageConf: BuildPageConf = {
     siteConf,
     faviconHtml: favicon.htmlHeadElements.join('\n'),

@@ -6,13 +6,13 @@ import { path as ffprobePath } from 'ffprobe-static';
 import ffmpeg, { ffprobe, setFfmpegPath, setFfprobePath } from 'fluent-ffmpeg';
 import fs from 'fs';
 
-export async function extractVideoThumbnail(videoFileOrUrl: Str, dev: Bool = false): Promise<Buffer> {
+export async function extractVideoThumbnail(videoFileOrUrl: Str, time: Num = 0, dev: Bool = false): Promise<Buffer> {
   if (!ffmpegPath) {
     err('No ffmpeg found');
   }
   setFfmpegPath(ffmpegPath);
   const tempy = await import('tempy');
-  const out = tempy.temporaryFile({ extension: '.jpg' });
+  const out = tempy.temporaryFile({ extension: '.png' });
   try {
     await new Promise<void>((resolve, reject) => {
       ffmpeg(videoFileOrUrl, {
@@ -25,7 +25,7 @@ export async function extractVideoThumbnail(videoFileOrUrl: Str, dev: Bool = fal
           reject();
         })
         .screenshot({
-          timestamps: [0],
+          timestamps: [time],
           fastSeek: true,
           filename: out,
         });
@@ -39,6 +39,13 @@ export async function extractVideoThumbnail(videoFileOrUrl: Str, dev: Bool = fal
     }
   }
   err('Frame extraction failed');
+}
+
+function getVideoBaseMimeType(format: Str | Nul): Str {
+  if (format?.includes('webm')) {
+    return 'webm';
+  }
+  return 'mp4';
 }
 
 export async function getVideoInfo(videoFileOrUrl: Str): Promise<BodyVideoSourceInfo> {
@@ -56,14 +63,14 @@ export async function getVideoInfo(videoFileOrUrl: Str): Promise<BodyVideoSource
           err('Expected a single video stream');
         }
         const audioStreams = data.streams.filter(s => s.codec_type === 'audio');
-        if (!isMany(audioStreams)) {
+        if (isMany(audioStreams)) {
           err('Expected no more than a single audio stream');
         }
         const video = videoStreams[0]!;
         const audio = audioStreams[0] ?? null;
         resolve({
           size: data.format.size!,
-          type: `video/${data.format.format_name}; codecs="${nonNulOrUnd([video.codec_name, audio?.codec_name]).join(', ')}"`,
+          type: `video/${getVideoBaseMimeType(data.format.format_name ?? null)}; codecs="${nonNulOrUnd([video.codec_name, audio?.codec_name]).join(', ')}"`,
           width: video.width!,
           height: video.height!,
           audio: audio !== null,

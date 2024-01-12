@@ -76,7 +76,8 @@ export type BodyVideo<TIsDef extends Bool = false> = R<{
   sources: RArr<BodyVideoSource<TIsDef>>;
   caption: RArr<BodySpan> | Nul;
   manual: Bool;
-  thumbnail: Def<Str, TIsDef, Str | Nul>;
+  thumbnails: Def<RArr<BodyImageSource<TIsDef>>, TIsDef, Str | Nul>;
+  thumbnailTime: Def<Und, TIsDef, Num | Nul>;
 }> & Kind<BodyElementKind.video>
 
 export type BodyImage<TIsDef extends Bool = false> = R<{

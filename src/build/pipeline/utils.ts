@@ -19,6 +19,27 @@ export function emitFile(file: Str, name: Str = randomStaticName()): Str {
   return name;
 }
 
+export function mimeToExt(mimeType: Str): Str | Nul {
+  return {
+    'image/jpeg': 'jpg',
+    'image/webp': 'webp',
+    'image/ico': 'ico',
+    'image/png': 'png',
+    'image/svg+xml': 'svg',
+    'font/woff': 'woff',
+    'font/woff2': 'woff2',
+    'video/mp4': 'mp4',
+    'video/webm': 'webm',
+    'text/css': 'css',
+    'text/javascript': 'js',
+  }[mimeType.toLowerCase().split(';')[0]!] ?? null;
+}
+
+export function mimeToSuffix(mimeType: Str): Str {
+  const ext = mimeToExt(mimeType);
+  return ext ? `.${ext}` : '';
+}
+
 export type BuildPageResult = R<{
   url: Str;
   allowRobots: Bool;
@@ -37,20 +58,19 @@ export class PageResource {
 
   private readonly _data: Str | Buffer;
   readonly mimeType: Str;
-  readonly suffix: Str;
   private _inlineData: Str | Nul;
   private _url: Str | Nul;
 
-  constructor(data: Str | Buffer, mimeType: Str, suffix: Str = '') {
+  constructor(data: Str | Buffer, mimeType: Str) {
     this._data = data;
     this.mimeType = mimeType;
     this._inlineData = null;
     this._url = null;
-    this.suffix = suffix;
   }
 
   get url(): Str {
-    return this._url ??= emitData(this._data, randomStaticName(this.suffix));
+    const suffix = mimeToSuffix(this.mimeType);
+    return this._url ??= emitData(this._data, randomStaticName(suffix));
   }
 
   get inline(): Str {

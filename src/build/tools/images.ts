@@ -45,10 +45,11 @@ export async function buildImage(imageFileOrData: Str | Buffer, options: ImageOp
       info: {
         width: info.width,
         height: info.height,
-        type: info.format,
+        type: `image/${info.format}`,
         size: info.size,
       },
     };
   }));
-  return images.sort((a, b) => a.info.size - b.info.size).slice(0, 2);
+  images.sort((a, b) => a.info.size - b.info.size);
+  return images.slice(0, images[0]?.info.type === 'image/webp' ? 2 : 1);
 }

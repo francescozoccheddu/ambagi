@@ -1,7 +1,7 @@
 import { mapValues, toArr } from '@francescozoccheddu/ts-goodies/objects';
-import { Body } from 'ambagi/pipeline/body';
-import { PageConf } from 'ambagi/pipeline/conf';
-import { BuildPageConf, BuildPageResult, emitData, emitFile, randomStaticName } from 'ambagi/pipeline/utils';
+import { Body, BodyImageSource } from 'ambagi/pipeline/body';
+import { PageConf, SiteConfImageResolution } from 'ambagi/pipeline/conf';
+import { BuildPageConf, BuildPageResult, emitData, emitFile, mimeToSuffix, randomStaticName } from 'ambagi/pipeline/utils';
 import { processBodyDef } from 'ambagi/tools/bodyDef';
 import { parseBodyXml } from 'ambagi/tools/bodyXml';
 import { makeXmlLoader, makeYamlLoader, XmlLoader, YamlLoader } from 'ambagi/tools/data';
@@ -20,6 +20,17 @@ type FontResource = R<{
   woff2Url: Str;
 }>
 
+async function processImageSourceDef(imageFileOrData: Str | Buffer, maxSize: SiteConfImageResolution): Promise<RArr<BodyImageSource>> {
+  const images = await buildImage(imageFileOrData, {
+    maxWidth: maxSize.width,
+    maxHeight: maxSize.height,
+  });
+  return images.map(img => ({
+    uri: emitData(img.data, randomStaticName(mimeToSuffix(img.info.type))),
+    info: img.info,
+  }));
+}
+
 export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<BuildPageResult> {
   pageConfLoader ??= makeYamlLoader<PageConf>(path.join(dirs.schemas, 'page.json'));
   bodyLoader ??= makeXmlLoader<Body<true>>(path.join(dirs.schemas, 'body.xsd'), parseBodyXml);
@@ -30,31 +41,29 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
   const body = await processBodyDef(bodyDef, {
     async processImage(def) {
       const file = path.join(assetsDir, def.sources.uri);
-      const images = await buildImage(file, {
-        maxWidth: maxImageSize.width,
-        maxHeight: maxImageSize.height,
-      });
       return {
         ...def,
-        sources: images.map(img => ({
-          uri: emitData(img.data),  // TODO: Add ext
-          info: img.info,
-        })),
+        sources: await processImageSourceDef(file, maxImageSize),
       };
     },
     async processVideo(def) {
-      const thumbnail = def.thumbnail ?? emitData(await extractVideoThumbnail(path.join(assetsDir, def.sources[0]!.uri)));  // TODO: Add ext
+      const sources = await Promise.all(def.sources.map(async src => {
+        const file = path.join(assetsDir, src.uri);
+        const info = await getVideoInfo(file);
+        return {
+          info,
+          uri: emitFile(file, randomStaticName(mimeToSuffix(info.type))),
+        };
+      }));
+      const rawThumbnail = def.thumbnails ?? await extractVideoThumbnail(path.join(assetsDir, def.sources[0]!.uri), def.thumbnailTime ?? 0);
       return {
         ...def,
-        thumbnail,
-        sources: await Promise.all(def.sources.map(async src => {
-          const file = path.join(assetsDir, src.uri);
-          const info = await getVideoInfo(file);
-          return {
-            info,
-            uri: emitFile(file), // TODO: Add ext
-          };
-        })),
+        thumbnailTime: undefined,
+        thumbnails: await processImageSourceDef(rawThumbnail, {
+          width: Math.max(...sources.map(s => s.info.width)),
+          height: Math.max(...sources.map(s => s.info.height)),
+        }),
+        sources,
       };
     },
   });

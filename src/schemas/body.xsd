@@ -109,6 +109,14 @@
     </xs:sequence>
     <xs:attribute name="manual" type="xs:boolean" default="false" use="optional" />
     <xs:attribute name="thumbnail" type="am:asset" use="optional" />
+    <xs:attribute name="thumbnailTime" use="optional">
+      <xs:simpleType>
+        <xs:restriction base="xs:double">
+          <xs:minInclusive value="0" />
+          <xs:maxInclusive value="3600" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
   </xs:complexType>
 
   <xs:simpleType name="asset">
