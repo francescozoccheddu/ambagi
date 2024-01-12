@@ -1,0 +1,3 @@
+[submodule "ambagi-pages"]
+	path = ambagi-pages
+	url = https://github.com/francescozoccheddu/ambagi-pages.git
