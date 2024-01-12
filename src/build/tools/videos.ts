@@ -12,7 +12,7 @@ export async function extractVideoThumbnail(videoFileOrUrl: Str, dev: Bool = fal
   }
   setFfmpegPath(ffmpegPath);
   const tempy = await import('tempy');
-  const out = tempy.temporaryFile({ extension: '.png' });
+  const out = tempy.temporaryFile({ extension: '.jpg' });
   try {
     await new Promise<void>((resolve, reject) => {
       ffmpeg(videoFileOrUrl, {

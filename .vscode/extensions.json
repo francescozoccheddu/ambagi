@@ -7,5 +7,6 @@
     "ducfilan.pug-formatter",
     "gruntfuggly.todo-tree",
     "redhat.vscode-xml",
+    "ritwickdey.liveserver",
   ]
 }
