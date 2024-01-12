@@ -80,4 +80,5 @@ export async function devSite(): Promise<void> {
     setEnvironment(wasDev);
   }
   server.close();
+  server.closeAllConnections();
 }

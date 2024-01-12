@@ -41,12 +41,12 @@ export async function buildStyle(sourceFile: Str, urlMapper: StyleUrlMapper | Nu
       })] : []),
     ...(dev ? [] : [
       autoprefixerPlugin,
-      cssnanoPlugin({
-        preset: cssnanoPreset({
-          autoprefixer: false,
-        }),
-      }),
     ]),
+    cssnanoPlugin({
+      preset: cssnanoPreset({
+        autoprefixer: false,
+      }),
+    }),
   ])
     .process(sassResult.css, {
       from: undefined,

@@ -7,16 +7,22 @@ export type LayoutBuilder<TLocals extends StrObj> = (locals: TLocals) => Promise
 
 export function makeLayoutBuilder<TLocals extends StrObj>(templateFile: Str): LayoutBuilder<TLocals> {
   const template = pug.compileFile(templateFile);
-  const devScript = dev ? getClientScript() : null;
-  return async (locs: TLocals) => await minify(template({ ...locs, devScript }), {
-    collapseBooleanAttributes: true,
-    collapseWhitespace: true,
-    decodeEntities: true,
-    html5: true,
-    minifyCSS: true,
-    minifyJS: true,
-    minifyURLs: true,
-    removeComments: true,
-    removeAttributeQuotes: true,
-  });
+  return async (locs: TLocals) => {
+    const devScript = dev ? getClientScript() : null;
+    const html = template({ ...locs, devScript });
+    if (dev) {
+      return html;
+    }
+    return await minify(html, {
+      collapseBooleanAttributes: true,
+      collapseWhitespace: true,
+      decodeEntities: true,
+      html5: true,
+      minifyCSS: true,
+      minifyJS: true,
+      minifyURLs: true,
+      removeComments: true,
+      removeAttributeQuotes: true,
+    });
+  };
 }
