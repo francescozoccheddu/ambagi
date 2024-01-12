@@ -100,6 +100,7 @@
       <xs:element name="source" minOccurs="1" maxOccurs="1" type="am:media-source" />
       <xs:element name="caption" type="am:text" minOccurs="0" maxOccurs="1" />
     </xs:sequence>
+    <xs:attribute name="alt" type="am:non-empty-string" use="optional" />
   </xs:complexType>
 
   <xs:complexType name="video">
@@ -109,6 +110,7 @@
     </xs:sequence>
     <xs:attribute name="manual" type="xs:boolean" default="false" use="optional" />
     <xs:attribute name="thumbnail" type="am:asset" use="optional" />
+    <xs:attribute name="alt" type="am:non-empty-string" use="optional" />
     <xs:attribute name="thumbnailTime" use="optional">
       <xs:simpleType>
         <xs:restriction base="xs:double">

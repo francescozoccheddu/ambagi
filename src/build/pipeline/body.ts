@@ -72,17 +72,20 @@ export type BodyMediaBox<TIsDef extends Bool = false> = R<{
   location: BodyMediaBoxLocation;
 }> & Kind<BodyElementKind.mediaBox>
 
-export type BodyVideo<TIsDef extends Bool = false> = R<{
-  sources: RArr<BodyVideoSource<TIsDef>>;
+type BodyMediaBase = R<{
   caption: RArr<BodySpan> | Nul;
+  alt: Str | Nul;
+}>
+
+export type BodyVideo<TIsDef extends Bool = false> = BodyMediaBase & R<{
+  sources: RArr<BodyVideoSource<TIsDef>>;
   manual: Bool;
   thumbnails: Def<RArr<BodyImageSource<TIsDef>>, TIsDef, Str | Nul>;
   thumbnailTime: Def<Und, TIsDef, Num | Nul>;
 }> & Kind<BodyElementKind.video>
 
-export type BodyImage<TIsDef extends Bool = false> = R<{
+export type BodyImage<TIsDef extends Bool = false> = BodyMediaBase & R<{
   sources: Def<RArr<BodyImageSource<TIsDef>>, TIsDef, BodyImageSource<TIsDef>>;
-  caption: RArr<BodySpan> | Nul;
 }> & Kind<BodyElementKind.image>
 
 export type BodyMedia<TIsDef extends Bool = false> =

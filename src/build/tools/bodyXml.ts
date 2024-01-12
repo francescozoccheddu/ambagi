@@ -53,6 +53,7 @@ function visitEl(el: XmlElement | Und): Unk {
             sources: els.filter(e => e.name === 'source').map(visitEl),
             caption: (visitEl(els.filter(e => e.name === 'caption')[0]) as BodyParagraph).children,
             thumbnails: attrs['thumbnail']?.toString() ?? null,
+            alt: attrs['alt']?.toString() ?? null,
             thumbnailTime: toFloatOrNul(attrs['thumbnailTime']?.toString() ?? null),
           };
         case 'image':
@@ -60,6 +61,7 @@ function visitEl(el: XmlElement | Und): Unk {
             kind: BodyElementKind.image,
             sources: els.filter(e => e.name === 'source').map(visitEl)[0],
             caption: visitEl(els.filter(e => e.name === 'caption')[0]),
+            alt: attrs['alt']?.toString() ?? null,
           };
         case 'caption':
         case 'text':
