@@ -5,15 +5,18 @@ import ffmpegPath from 'ffmpeg-static';
 import { path as ffprobePath } from 'ffprobe-static';
 import ffmpeg, { ffprobe, setFfmpegPath, setFfprobePath } from 'fluent-ffmpeg';
 import fs from 'fs';
+import { nanoid } from 'nanoid';
+import path from 'path';
+import { dirSync } from 'tmp';
 
 export async function extractVideoThumbnail(videoFileOrUrl: Str, time: Num = 0, dev: Bool = false): Promise<Buffer> {
   if (!ffmpegPath) {
     err('No ffmpeg found');
   }
   setFfmpegPath(ffmpegPath);
-  const tempy = await import('tempy');
-  const out = tempy.temporaryFile({ extension: '.png' });
+  const outDir = dirSync();
   try {
+    const filename = `${nanoid()}.png`;
     await new Promise<void>((resolve, reject) => {
       ffmpeg(videoFileOrUrl, {
         timeout: dev ? 5 : 10,
@@ -27,18 +30,16 @@ export async function extractVideoThumbnail(videoFileOrUrl: Str, time: Num = 0, 
         .screenshot({
           timestamps: [time],
           fastSeek: true,
-          filename: out,
+          filename,
+          folder: outDir.name,
         });
     });
-    return fs.readFileSync(out);
+    return fs.readFileSync(path.join(outDir.name, filename));
   } catch (e) {
     cerr(e, 'Frame extraction failed');
   } finally {
-    if (fs.existsSync(out)) {
-      fs.unlinkSync(out);
-    }
+    fs.rmSync(outDir.name, { recursive: true, force: true });
   }
-  err('Frame extraction failed');
 }
 
 function getVideoBaseMimeType(format: Str | Nul): Str {
