@@ -22,7 +22,7 @@ html
     border-left: 0.5rem solid colors.$mut
 
   #body
-    margin: 5rem 0rem
+    margin: 6rem 0rem
 
   figure
     padding: 0rem
@@ -70,9 +70,10 @@ html
     .footnote
       display: flex
       flex-direction: row
-      gap: 0.8rem
+      gap: 0.6rem
       padding: 1rem 2rem 1rem 0rem
       border-radius: 0.25rem
+      transition: background-color 1s ease
 
       .footnote-head
         width: 1.5rem
@@ -87,6 +88,10 @@ html
         figure
           max-width: 50%
 
+      &:target
+        scroll-margin-top: 2rem
+        background-color: colors.$fnbg
+
   #credits
     margin: 2rem 2rem
 
@@ -97,3 +102,6 @@ html
   #author
     margin-top: 6rem
     margin-bottom: 5rem
+
+  a:target
+    scroll-margin-top: 2rem

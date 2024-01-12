@@ -78,8 +78,6 @@ html(lang=siteConf.language)
         |   font-family: '#{fontKey}';
         |   src: #{['woff2', 'woff'].map(fmt => `url('${font[`${fmt}Url`]}') format('${fmt}')`).join(", ")};
         |   font-display: block;
-        |   font-style: normal;
-        |   font-weight: 400;
         | }
     style #{res.styles.main.inline}
     noscript 

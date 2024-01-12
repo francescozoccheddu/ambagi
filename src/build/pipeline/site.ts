@@ -22,7 +22,7 @@ let siteConfLoader: YamlLoader<SiteConf> | Nul = null;
 
 export async function buildSite(): Promise<void> {
   log('Clean');
-  fs.rmSync(dirs.dist, { recursive: true, force: true });
+  fs.rmSync(dirs.dist, { recursive: true, force: true, maxRetries: 3 });
   fs.mkdirSync(dirs.dist);
   fs.mkdirSync(dirs.distStatic);
   log('Load config');
