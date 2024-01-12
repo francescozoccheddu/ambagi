@@ -37,13 +37,13 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
       return {
         ...def,
         sources: images.map(img => ({
-          uri: emitData(img.data),
+          uri: emitData(img.data),  // TODO: Add ext
           info: img.info,
         })),
       };
     },
     async processVideo(def) {
-      const thumbnail = def.thumbnail ?? emitData(await extractVideoThumbnail(path.join(assetsDir, def.sources[0]!.uri)));
+      const thumbnail = def.thumbnail ?? emitData(await extractVideoThumbnail(path.join(assetsDir, def.sources[0]!.uri)));  // TODO: Add ext
       return {
         ...def,
         thumbnail,
@@ -52,15 +52,15 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
           const info = await getVideoInfo(file);
           return {
             info,
-            uri: emitFile(file),
+            uri: emitFile(file), // TODO: Add ext
           };
         })),
       };
     },
   });
   const fontUrls: RStrObj<FontResource> = mapValues(buildConf.fonts, () => ({
-    woff2Url: randomStaticName(),
-    woffUrl: randomStaticName(),
+    woff2Url: randomStaticName('.woff2'),
+    woffUrl: randomStaticName('.woff'),
   }));
   const fontUsages = mapValues(buildConf.fonts, () => '');
   const html = makeLayoutBuilder(path.join(dirs.layouts, 'root.pug'))({

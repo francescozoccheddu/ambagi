@@ -4,14 +4,14 @@ mixin run(children)
       when "span"
         case ch.format
           when "normal"
-            span #{ch.text}
+            span #{text("bodyNorm", ch.text)}
           when "emphasized"
-            emph #{ch.text}
+            emph #{text("bodyEmph", ch.text)}
       when "footnoteLink"
         - const i = body.footnotes.findIndex(fn => fn.key === ch.key)
         - const idx = i + 1
         a.footnote-link(tabIndex=-1 id=`fnl-${idx}` href=`#fn-${idx}` data-index=idx)
-          sup #{idx}
+          sup #{text("bodyNorm", idx)}
 
 mixin paragraph(paragraph)
   case paragraph.format
@@ -42,13 +42,16 @@ html(lang= language)
         | @font-face {
         |   font-family: '#{fontKey}';
         |   src: #{['woff2', 'woff'].map(fmt => `url('${font[`${fmt}Url`]}') format('${fmt}')`).join(", ")};
-        |   font-display: 'block';
-        | };
+        |   font-display: block;
+        |   font-style: normal;
+        |   font-weight: 400;
+        | }
+    style #{res.styles.main.inline}
   body
     main
       section.header
-        h1.logo #{siteConf.title}
-        h2.title #{pageConf.title}
+        h1.logo #{text("logo", siteConf.title.toLowerCase())}
+        h2.title #{text("head", pageConf.title)}
       section.body
         each el in body.main
           +element(el)
@@ -67,4 +70,4 @@ html(lang= language)
           each cr in body.credits
             .credit
               +run(cr)
-      section.author #{siteConf.author}
+      section.author #{text("logo", siteConf.author)}
