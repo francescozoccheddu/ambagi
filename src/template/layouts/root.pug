@@ -8,8 +8,9 @@ mixin run(children)
           when "emphasized"
             emph #{ch.text}
       when "footnoteLink"
-        - const idx = body.footnotes.findIndex(fn => fn.key === ch.key)
-        a.footnote-link(tabIndex=-1 id=`fnl-${idx}` href=`fn-${idx}` data-index=idx)
+        - const i = body.footnotes.findIndex(fn => fn.key === ch.key)
+        - const idx = i + 1
+        a.footnote-link(tabIndex=-1 id=`fnl-${idx}` href=`#fn-${idx}` data-index=idx)
           sup #{idx}
 
 mixin paragraph(paragraph)
@@ -35,6 +36,14 @@ html(lang= language)
     meta(name="author" content=siteConf.author)
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     meta(name="robots" content=(siteConf.allowRobots && pageConf.allowRobots ? "nofollow, noarchive, nositelinkssearchbox, notranslate" : "none"))
+    style
+      each fontKey in ["logo", "head", "bodyNorm", "bodyEmph"]
+        - const font = res.fonts[fontKey]
+        | @font-face {
+        |   font-family: '#{fontKey}';
+        |   src: #{['woff2', 'woff'].map(fmt => `url('${font[`${fmt}Url`]}') format('${fmt}')`).join(", ")};
+        |   font-display: 'block';
+        | };
   body
     main
       section.header
@@ -45,7 +54,8 @@ html(lang= language)
           +element(el)
       if body.footnotes.length > 0
         section.footnotes
-          each fn, idx in body.footnotes
+          each fn, i in body.footnotes
+            - const idx = i + 1
             .footnote(data-index=idx id=`fn-${idx}`)
               .footnote-head
                 a.footnote-rlink(tabindex=-1 href=`#fnl-${idx}` data-index=idx)
