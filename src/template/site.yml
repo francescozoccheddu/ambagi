@@ -19,4 +19,5 @@ resources:
     main: "main.ts"
   styles:
     main: "main.sass"
+    noscript: "noscript.sass"
   favicon: "favicon.svg"

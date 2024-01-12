@@ -18,9 +18,7 @@ export async function extractVideoThumbnail(videoFileOrUrl: Str, time: Num = 0, 
   try {
     const filename = `${nanoid()}.png`;
     await new Promise<void>((resolve, reject) => {
-      ffmpeg(videoFileOrUrl, {
-        timeout: dev ? 5 : 10,
-      })
+      ffmpeg(videoFileOrUrl)
         .on('end', () => {
           resolve();
         })

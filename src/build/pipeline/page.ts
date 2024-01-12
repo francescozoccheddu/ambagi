@@ -72,7 +72,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
     woffUrl: randomStaticName('.woff'),
   }));
   const fontUsages = mapValues(buildConf.fonts, () => '');
-  const html = makeLayoutBuilder(path.join(dirs.layouts, 'root.pug'))({
+  const html = await makeLayoutBuilder(path.join(dirs.layouts, 'root.pug'))({
     res: {
       fonts: fontUrls,
       icons: buildConf.icons,

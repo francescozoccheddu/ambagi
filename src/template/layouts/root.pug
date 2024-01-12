@@ -8,7 +8,7 @@ mixin run(children)
           when "normal"
             span #{text("bodyNorm", ch.text)}
           when "emphasized"
-            emph #{text("bodyEmph", ch.text)}
+            em #{text("bodyEmph", ch.text)}
       when "footnoteLink"
         - const i = body.footnotes.findIndex(fn => fn.key === ch.key)
         - const idx = i + 1
@@ -83,32 +83,21 @@ html(lang=siteConf.language)
         | }
     style #{res.styles.main.inline}
     noscript 
-      style
-        | body {
-        |   overflow-y: scroll;
-        | }
-        | #main {
-        |   display: block;
-        |   animation-play-state: running;
-        |   animation-delay: 0s;  
-        |   pointer-events: auto;
-        | }
-        | #loading {
-        |   display: none;
-        | }
+      style #{res.styles.noscript.inline}
+    // TODO: Remove
+    style #{res.styles.noscript.inline} 
   body
     #loading
-      #loading-content
-        | !{res.icons.loading.inline}
+      #loading-content !{res.icons.loading.inline}
     main#main
-      section.header
-        h1.logo #{text("logo", siteConf.title.toLowerCase())}
-        h2.title #{text("head", pageConf.title)}
-      section.body
+      section#header
+        h1#logo #{text("logo", siteConf.title.toLowerCase())}
+        h2#title #{text("head", pageConf.title)}
+      section#body
         each el in body.main
           +element(el)
       if body.footnotes.length > 0
-        section.footnotes
+        section#footnotes
           each fn, i in body.footnotes
             - const idx = i + 1
             .footnote(data-index=idx id=`fn-${idx}`)
@@ -118,9 +107,9 @@ html(lang=siteConf.language)
               .footnote-body
                 +element(fn.child)
       if body.credits.length > 0
-        section.credits
+        section#credits
           each cr in body.credits
             .credit
-              +run(cr)
-      section.author #{text("logo", siteConf.author)}
+              +run(cr.children)
+      section#author #{text("logo", siteConf.author)}
   script(src=res.scripts.main.url)
