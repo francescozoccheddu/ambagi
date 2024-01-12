@@ -32,14 +32,17 @@ async function processImageSourceDef(imageFileOrData: Str | Buffer, maxSize: Sit
 }
 
 export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<BuildPageResult> {
+  console.log('\tLoad conf');
   pageConfLoader ??= makeYamlLoader<PageConf>(path.join(dirs.schemas, 'page.json'));
   bodyLoader ??= makeXmlLoader<Body<true>>(path.join(dirs.schemas, 'body.xsd'), parseBodyXml);
   const assetsDir = path.join(dir, 'assets');
   const pageConf = pageConfLoader(path.join(dir, 'page.yml'));
   const bodyDef = bodyLoader(path.join(dir, 'body.xml'));
   const maxImageSize = buildConf.siteConf.maxImageSize ?? { width: 2000, height: 2000 };
+  console.log('\tProcess body');
   const body = await processBodyDef(bodyDef, {
     async processImage(def) {
+      console.log(`\t\tProcessing image '${def.sources.uri}'`);
       const file = path.join(assetsDir, def.sources.uri);
       return {
         ...def,
@@ -47,6 +50,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
       };
     },
     async processVideo(def) {
+      console.log(`\t\tProcessing video '${def.sources[0]!.uri}'`);
       const sources = await Promise.all(def.sources.map(async src => {
         const file = path.join(assetsDir, src.uri);
         const info = await getVideoInfo(file);
@@ -72,6 +76,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
     woffUrl: randomStaticName('.woff'),
   }));
   const fontUsages = mapValues(buildConf.fonts, () => '');
+  console.log('\tBuild layout');
   const html = await makeLayoutBuilder(path.join(dirs.layouts, 'root.pug'))({
     res: {
       fonts: fontUrls,
@@ -100,6 +105,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
     },
     body,
   });
+  console.log('\tBuild fonts');
   for (const [key, text] of toArr(fontUsages)) {
     const data = buildConf.fonts[key]!;
     const urls = fontUrls[key]!;
@@ -108,6 +114,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
     emitData(fonts.woff2, urls.woff2Url);
   }
   emitData(html, `${pageConf.url}.html`);
+  console.log('\tDone');
   return {
     allowRobots: pageConf.allowRobots ?? false,
     url: pageConf.url,

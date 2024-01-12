@@ -21,18 +21,25 @@ async function mapValuesAsync<TV>(obj: RStrObj<Str>, map: (file: Str) => Promise
 let siteConfLoader: YamlLoader<SiteConf> | Nul = null;
 
 export async function buildSite(): Promise<void> {
+  console.log('Clean');
   fs.rmSync(dirs.dist, { recursive: true, force: true });
   fs.mkdirSync(dirs.dist);
   fs.mkdirSync(dirs.distStatic);
+  console.log('Load config');
   siteConfLoader ??= makeYamlLoader<SiteConf>(path.join(dirs.schemas, 'site.json'));
   const siteConf = siteConfLoader(path.join(dirs.template, 'site.yml'));
+  console.log('Build favicon');
   const favicon = await buildFavicon(path.join(dirs.favicon, siteConf.resources.favicon), siteConf);
   for (const file of favicon.files) {
     emitData(file.data, file.path);
   }
+  console.log('Load fonts');
   const fonts: RStrObj<Buffer> = mapValues(siteConf.resources.fonts, f => fs.readFileSync(path.join(dirs.fonts, f)));
+  console.log('Build icons');
   const icons: RStrObj<PageResource> = mapValues(siteConf.resources.icons, f => new PageResource(buildIcon(path.join(dirs.icons, f)), 'image/svg+xml'));
+  console.log('Build scripts');
   const scripts: RStrObj<PageResource> = await mapValuesAsync(siteConf.resources.scripts, async f => new PageResource(await buildScript(path.join(dirs.scripts, f)), 'text/javascript'));
+  console.log('Build styles');
   const styles: RStrObj<PageResource> = await mapValuesAsync(siteConf.resources.styles, async f => new PageResource(await buildStyle(path.join(dirs.styles, f)), 'text/css'));
   const buildPageConf: BuildPageConf = {
     siteConf,
@@ -49,10 +56,13 @@ export async function buildSite(): Promise<void> {
   ];
   const pageUrls: Arr<Str> = [];
   for (const pageDirent of pageDirents) {
+    console.log(`Build page '${pageDirent.name}'`);
     const buildOut = await buildPage(path.join(pageDirent.path, pageDirent.name), buildPageConf);
     pageUrls.push(buildOut.url);
     robotsEntries.push({ path: buildOut.url, allow: buildOut.allowRobots });
   }
+  console.log('Build metadata');
   emitData(buildRobotsTxt(joinUrl(siteConf.url, 'sitemap.txt'), robotsEntries), 'robots.txt');
   emitData(buildSitemapTxt(pageUrls), 'sitemap.txt');
+  console.log('Done');
 }

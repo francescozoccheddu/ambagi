@@ -1,9 +1,84 @@
+@use './breakpoints'
+
 #logo
   margin-bottom: -0.25em
 
 #title
   margin-top: 0em
-  margin-bottom: 1em
+  margin-bottom: 1.7em
 
 #main
-  padding: 4em 1em 6em 1em
+  padding: 7em 1em 6em 1em
+  @media (min-width: breakpoints.$mdMinWidth)
+    padding: 7em 1.5em 6em 1.5em
+  @media (min-width: breakpoints.$lgMinWidth)
+    padding: 7em 2em 6em 2em
+
+  figure
+    padding: 0em
+    margin: 2em 0em
+    width: 100%
+
+    video, img
+      display: block
+      width: 100%
+      height: auto
+
+    figcaption
+      margin: 1em 2em
+
+  .inline
+    overflow: hidden
+    width: 100%
+
+    video
+      width: 100%
+      object-fit: cover
+      @media (min-width: breakpoints.$mdMinWidth)
+        height: 300px
+      @media (min-width: breakpoints.$lgMinWidth)
+        height: 340px
+      @media (min-width: breakpoints.$xlMinWidth)
+        height: 380px
+
+    @media (min-width: breakpoints.$mdMinWidth)
+      width: 400px
+
+      figure
+        margin: 0.4em 0em 0.2em 0em
+
+    @media (min-width: breakpoints.$lgMinWidth)
+      width: 500px
+    @media (min-width: breakpoints.$xlMinWidth)
+      width: 550px
+
+  .inline[data-float="left"]
+    float: left
+    margin-right: 1.5em
+
+  .inline[data-float="right"]
+    float: right
+    margin-left: 1.5em
+
+  .inline[data-offset="left"]
+    video
+      object-position: left
+
+  .inline[data-offset="right"]
+    video
+      object-position: right
+
+  #credits
+    padding: 2em 2em
+    @media (min-width: breakpoints.$mdMinWidth)
+      padding: 2em 3em
+    @media (min-width: breakpoints.$lgMinWidth)
+      padding: 2em 4em
+
+    .credit
+      margin-top: 0.5em
+      margin-bottom: 0.5em
+
+  #author
+    margin-top: 3em
+    margin-bottom: 2em
