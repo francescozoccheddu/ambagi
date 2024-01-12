@@ -13,6 +13,7 @@ import { dirs } from 'ambagi/utils/dirs';
 import { joinUrl } from 'ambagi/utils/urls';
 import fs from 'fs';
 import path from 'path';
+import { rimraf } from 'rimraf';
 
 async function mapValuesAsync<TV>(obj: RStrObj<Str>, map: (file: Str) => Promise<TV>): Promise<RStrObj<TV>> {
   return toObj(await Promise.all(toArr(obj).map(async ([k, v]) => [k, await (map(v))])));
@@ -22,7 +23,7 @@ let siteConfLoader: YamlLoader<SiteConf> | Nul = null;
 
 export async function buildSite(): Promise<void> {
   log('Clean');
-  fs.rmSync(dirs.dist, { recursive: true, force: true, maxRetries: 3 });
+  await rimraf(dirs.dist);
   fs.mkdirSync(dirs.dist);
   fs.mkdirSync(dirs.distStatic);
   log('Load config');
