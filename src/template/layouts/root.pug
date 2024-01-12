@@ -28,7 +28,7 @@ mixin element(element)
       +paragraph(element)
 
 doctype html
-html(lang= language)
+html(lang= siteConf.language)
   head
     title #{siteConf.title}: #{pageConf.title}
     meta(name="description" content=pageConf.description || siteConf.description)
