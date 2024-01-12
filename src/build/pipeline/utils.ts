@@ -20,8 +20,7 @@ export function emitFile(file: Str, name: Str = randomStaticName()): Str {
 }
 
 export type BuildPageResult = R<{
-  publicUrl: Str;
-  pageUrl: Str;
+  url: Str;
   allowRobots: Bool;
 }>
 

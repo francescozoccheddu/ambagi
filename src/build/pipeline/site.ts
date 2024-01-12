@@ -7,10 +7,10 @@ import { makeYamlLoader, YamlLoader } from 'ambagi/tools/data';
 import { buildFavicon } from 'ambagi/tools/favicon';
 import { buildIcon } from 'ambagi/tools/icons';
 import { buildRobotsTxt, buildSitemapTxt, RobotsEntry } from 'ambagi/tools/robots';
-import { buildRoutes, Route } from 'ambagi/tools/routes';
 import { buildScript } from 'ambagi/tools/scripts';
 import { buildStyle } from 'ambagi/tools/style';
 import { dirs } from 'ambagi/utils/dirs';
+import { joinUrl } from 'ambagi/utils/urls';
 import fs from 'fs';
 import path from 'path';
 
@@ -47,15 +47,12 @@ export async function buildSite(): Promise<void> {
     { path: '/', allow: siteConf.allowRobots ?? false },
     { path: `/${dirs.distStaticBaseName}`, allow: false },
   ];
-  const routes: Arr<Route> = [];
   const pageUrls: Arr<Str> = [];
   for (const pageDirent of pageDirents) {
     const buildOut = await buildPage(path.join(pageDirent.path, pageDirent.name), buildPageConf);
-    pageUrls.push(buildOut.publicUrl);
-    robotsEntries.push({ path: buildOut.publicUrl, allow: buildOut.allowRobots });
-    routes.push({ from: buildOut.publicUrl, to: buildOut.pageUrl });
+    pageUrls.push(buildOut.url);
+    robotsEntries.push({ path: buildOut.url, allow: buildOut.allowRobots });
   }
-  emitData(buildRobotsTxt(siteConf.url, robotsEntries), 'robots.txt');
-  emitData(buildSitemapTxt(siteConf.url, pageUrls), 'sitemap.txt');
-  emitData(buildRoutes(routes), 'ROUTES');
+  emitData(buildRobotsTxt(joinUrl(siteConf.url, 'sitemap.txt'), robotsEntries), 'robots.txt');
+  emitData(buildSitemapTxt(pageUrls), 'sitemap.txt');
 }

@@ -98,10 +98,9 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
     emitData(fonts.woff, urls.woffUrl);
     emitData(fonts.woff2, urls.woff2Url);
   }
-  const pageUrl = emitData(html);
+  emitData(html, pageConf.url);
   return {
     allowRobots: pageConf.allowRobots ?? false,
-    publicUrl: pageConf.url,
-    pageUrl,
+    url: pageConf.url,
   };
 }

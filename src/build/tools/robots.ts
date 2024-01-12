@@ -1,14 +1,14 @@
-import { joinUrl } from 'ambagi/utils/urls';
+import path from 'path';
 
 export type RobotsEntry = R<{
   path: Str;
   allow: Bool;
 }>
 
-export function buildRobotsTxt(baseUrl: Str, entries: RArr<RobotsEntry>): Str {
-  return `User-agent: *\n${entries.map(entry => `${entry.allow ? 'Allow' : 'Disallow'}: ${joinUrl(baseUrl, entry.path)}`).join('\n')}`;
+export function buildRobotsTxt(sitemapUrl: Str, entries: RArr<RobotsEntry>): Str {
+  return `User-agent: *\n${entries.map(entry => `${entry.allow ? 'Allow' : 'Disallow'}: ${path.posix.join('/', entry.path)}`).join('\n')}\n\nSitemap: ${sitemapUrl}\n`;
 }
 
-export function buildSitemapTxt(baseUrl: Str, pagesUrlPath: RArr<Str>): Str {
-  return pagesUrlPath.map(pageUrl => joinUrl(baseUrl, pageUrl)).join('\n');
+export function buildSitemapTxt(pageUrls: RArr<Str>): Str {
+  return pageUrls.join('\n');
 }
