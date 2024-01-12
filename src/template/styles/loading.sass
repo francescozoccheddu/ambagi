@@ -1,0 +1,76 @@
+$loading-fade-duration: 1s
+
+@keyframes fade-in-main
+  0%
+    opacity: 0
+  100%
+    opacity: 1
+
+@keyframes fade-out-loading
+  0%
+    opacity: 1
+  100%
+    opacity: 0
+
+@keyframes fade-in-loading-content
+  0%
+    opacity: 0
+  100%
+    opacity: 1
+
+#main
+  opacity: 0
+  display: none
+  animation-delay: $loading-fade-duration
+  animation-play-state: paused
+  animation-name: fade-in-main
+  animation-duration: $loading-fade-duration
+  animation-timing-function: ease
+  animation-fill-mode: both
+
+#loading
+  animation-play-state: paused
+  animation-name: fade-out-loading
+  animation-duration: $loading-fade-duration
+  animation-timing-function: ease
+  animation-fill-mode: both
+  position: fixed
+  overflow: hidden
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  display: flex
+  flex-direction: row
+  align-items: center
+  justify-content: center
+
+  #loading-content
+    animation-play-state: running
+    animation-name: fade-in-loading-content
+    animation-duration: $loading-fade-duration
+    animation-timing-function: ease
+    animation-fill-mode: both
+    margin: auto
+
+    svg
+      opacity: 0.5
+
+body
+  pointer-events: none
+  overflow-x: hidden
+  scroll-behavior: smooth
+  overflow-y: hidden
+  scrollbar-gutter: stable both-edges
+
+  &.faded-in, &.fading-in
+    overflow-y: scroll
+
+  &.loaded
+
+    #main
+      display: block
+      animation-play-state: running
+
+    #loading
+      animation-play-state: running

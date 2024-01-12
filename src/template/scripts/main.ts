@@ -1,3 +1,3 @@
-import { helloWorld } from 'ambagi/utils/helloWorld';
+import { setLoaded } from 'ambagi/loading';
 
-console.log(helloWorld);
+setTimeout(setLoaded, 1000);

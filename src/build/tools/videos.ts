@@ -56,9 +56,10 @@ export async function getVideoInfo(videoFileOrUrl: Str): Promise<BodyVideoSource
   setFfprobePath(ffprobePath);
   try {
     return await new Promise<BodyVideoSourceInfo>((resolve, reject) => {
-      const timeoutId = setTimeout(reject, 5 * 1000);
-      ffprobe(videoFileOrUrl, (_err, data) => {
-        clearTimeout(timeoutId);
+      ffprobe(videoFileOrUrl, (error, data) => {
+        if (error) {
+          reject();
+        }
         const videoStreams = data.streams.filter(s => s.codec_type === 'video');
         if (!isSingle(videoStreams)) {
           err('Expected a single video stream');
