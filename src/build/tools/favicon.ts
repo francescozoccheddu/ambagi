@@ -1,4 +1,5 @@
 import { SiteConf } from 'ambagi/pipeline/conf';
+import { dev } from 'ambagi/utils/env';
 import fs from 'fs';
 import path from 'path';
 
@@ -27,7 +28,7 @@ export async function buildFavicon(faviconFile: Str, siteConf: SiteConf, basePat
       android: false,
       appleIcon: false,
       appleStartup: false,
-      favicons: true,
+      favicons: !dev,
       windows: false,
       yandex: false,
     },

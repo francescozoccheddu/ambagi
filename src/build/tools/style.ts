@@ -1,4 +1,5 @@
 import { dirs } from 'ambagi/utils/dirs';
+import { dev } from 'ambagi/utils/env';
 import autoprefixerPlugin from 'autoprefixer';
 import cssnanoPlugin from 'cssnano';
 import cssnanoPreset from 'cssnano-preset-advanced';
@@ -15,7 +16,7 @@ export type StyleUrlMapperFrom = R<{
 
 export type StyleUrlMapper = (from: StyleUrlMapperFrom) => Str | Promise<Str>
 
-export async function buildStyle(sourceFile: Str, urlMapper: StyleUrlMapper | Nul = null, dev: Bool = false): Promise<Str> {
+export async function buildStyle(sourceFile: Str, urlMapper: StyleUrlMapper | Nul = null): Promise<Str> {
   const loadPaths = [path.dirname(sourceFile), path.join(dirs.root, 'node_modules')];
   const sassResult = sass.compile(
     sourceFile,

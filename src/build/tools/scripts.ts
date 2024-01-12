@@ -7,6 +7,7 @@ import replacePlugin from '@rollup/plugin-replace';
 import stripPlugin from '@rollup/plugin-strip';
 import terserPlugin from '@rollup/plugin-terser';
 import typescriptPlugin from '@rollup/plugin-typescript';
+import { dev } from 'ambagi/utils/env';
 import path from 'path';
 import { OutputChunk, OutputOptions, rollup, RollupBuild, RollupOptions } from 'rollup';
 import inMemoryPlugin from 'rollup-plugin-memory-fs';
@@ -17,7 +18,7 @@ export type ScriptUrlMapperFrom = R<{
   scriptFile: Str | Nul;
 }>
 
-export async function buildScript(sourceFile: Str, replacements: RStrObj<RJson> = {}, dev: Bool = false): Promise<Str> {
+export async function buildScript(sourceFile: Str, replacements: RStrObj<RJson> = {}): Promise<Str> {
   const typescriptConfigFile = path.join(dirs.scripts, 'tsconfig.json');
   const inputOptions: RollupOptions = {
     context: dirs.scripts,

@@ -1,15 +1,20 @@
-import { prExc } from '@francescozoccheddu/ts-goodies/logs';
+import { Server as ReloadServer } from '@francescozoccheddu/reload-please';
+import { prDone, prExc } from '@francescozoccheddu/ts-goodies/logs';
 import { buildSite } from 'ambagi/pipeline/site';
 import { popLog, pushLog } from 'ambagi/pipeline/utils';
 import { dirs } from 'ambagi/utils/dirs';
+import { dev, setEnvironment } from 'ambagi/utils/env';
 import { watch as chokidarWatch } from 'chokidar';
+import Koa from 'koa';
+import koaStatic from 'koa-static';
 
-const delay = 0.5;
-
-export async function devSite(): Promise<void> {
+async function watch(): Promise<void> {
+  const delay = 0.5;
   let timeoutId: NodeJS.Timeout | Nul = null;
   let updating = false;
   let needsUpdate = false;
+  const reloadServer = new ReloadServer();
+  reloadServer.start();
   async function update(): Promise<void> {
     if (updating) {
       needsUpdate = true;
@@ -26,6 +31,7 @@ export async function devSite(): Promise<void> {
     }
     const endTime = performance.now();
     popLog(`Done (${((endTime - startTime) / 1000).toFixed(3)}s)`);
+    reloadServer.reload();
     if (needsUpdate && !timeoutId) {
       setTimeout(() => void update());
     }
@@ -53,5 +59,25 @@ export async function devSite(): Promise<void> {
   if (timeoutId) {
     clearTimeout(timeoutId);
   }
+  reloadServer.stop();
   await watcher.close();
+}
+
+export async function devSite(): Promise<void> {
+  const wasDev = dev;
+  setEnvironment(true);
+  const koa = new Koa();
+  koa.use(koaStatic(dirs.dist));
+  const port = 5500;
+  const server = koa.listen(port);
+  await new Promise(resolve => {
+    server.addListener('listening', resolve);
+  });
+  prDone(`Listening at http://localhost:${port}/`);
+  try {
+    await watch();
+  } finally {
+    setEnvironment(wasDev);
+  }
+  server.close();
 }

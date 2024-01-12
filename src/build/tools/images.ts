@@ -1,5 +1,6 @@
 import { isStr } from '@francescozoccheddu/ts-goodies/types';
 import { BodyImageSourceInfo } from 'ambagi/pipeline/body';
+import { dev } from 'ambagi/utils/env';
 import fs from 'fs';
 import sharp, { Sharp } from 'sharp';
 
@@ -13,7 +14,7 @@ export type ImageOptions = R<{
   maxHeight: Num;
 }>
 
-export async function buildImage(imageFileOrData: Str | Buffer, options: ImageOptions = { maxWidth: 2000, maxHeight: 2000 }, dev: Bool = false): Promise<RArr<ImageOut>> {
+export async function buildImage(imageFileOrData: Str | Buffer, options: ImageOptions = { maxWidth: 2000, maxHeight: 2000 }): Promise<RArr<ImageOut>> {
   const source = isStr(imageFileOrData) ? fs.readFileSync(imageFileOrData) : imageFileOrData;
   const img = sharp(source)
     .resize({

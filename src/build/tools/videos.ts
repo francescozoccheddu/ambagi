@@ -9,7 +9,7 @@ import { nanoid } from 'nanoid';
 import path from 'path';
 import { dirSync } from 'tmp';
 
-export async function extractVideoThumbnail(videoFileOrUrl: Str, time: Num = 0, dev: Bool = false): Promise<Buffer> {
+export async function extractVideoThumbnail(videoFileOrUrl: Str, time: Num = 0): Promise<Buffer> {
   if (!ffmpegPath) {
     err('No ffmpeg found');
   }

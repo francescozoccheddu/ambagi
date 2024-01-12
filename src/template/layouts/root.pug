@@ -113,3 +113,6 @@ html(lang=siteConf.language)
               +run(cr.children)
       section#author #{text("logo", siteConf.author)}
   script(src=res.scripts.main.url)
+  if devScript !== null
+    script
+      | !{devScript}
