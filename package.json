@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/francescozoccheddu/ambagi#readme",
   "dependencies": {
-    "@francescozoccheddu/reload-please": "^0.0.1",
+    "@francescozoccheddu/reload-please": "^0.0.2",
     "@francescozoccheddu/ts-goodies": "^0.0.6",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
@@ -74,7 +74,7 @@
     "rollup": "^4.9.5",
     "rollup-plugin-memory-fs": "^1.0.3",
     "sass": "^1.69.7",
-    "sharp": "^0.33.1",
+    "sharp": "^0.33.2",
     "subset-font": "^2.1.0",
     "svgo": "^3.2.0",
     "tmp": "^0.2.1",
