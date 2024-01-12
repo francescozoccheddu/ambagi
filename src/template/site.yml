@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=../schemas/site.json
+url: "https://ambagi.surge.sh"
+title: "Ambagi"
+description: "Personal blog"
+author: "F."
+language: "it"
+keywords: []
+resources:
+  fonts:
+    logo: "Tangerine-Bold.woff2"
+    head: "Afacad-Bold.woff2"
+    bodyNorm: "Sanchez-Regular.woff2"
+    bodyEmph: "Sanchez-Italic.woff2"
+  icons:
+    loading: "loading.svg"
+    videoPlay: "video-play.svg"
+    videoLoading: "video-loading.svg"
+  scripts:
+    main: "main.ts"
+  styles:
+    main: "main.sass"
+  favicon: "favicon.svg"

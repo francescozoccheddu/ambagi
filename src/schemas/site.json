@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://github.com/francescozoccheddu/ambagi/src/schemas/site.json",
+  "title": "Site",
+  "description": "The site definition",
+  "type": "object",
+  "$defs": {
+    "text": {
+      "type": "string",
+      "pattern": "^[a-zA-Z\u00E0-\u00FC\u00C0-\u00DC!?=():;.,\\-+\/*%&$\"'\u20AC#@#_<>]+(( )[a-zA-Z\u00E0-\u00FC\u00C0-\u00DC!?=():;.,\\-+\/*%&$\"'\u20AC#@#_<>]+)*$"
+    },
+    "file": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9\\-\\.]{1,128}$"
+    },
+    "resolution": {
+      "type": "number",
+      "maximum": 4096,
+      "minimum": 64
+    },
+    "resourceDict": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z]{1,32}$": {
+          "$ref": "#/$defs/file"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "url": {
+      "type": "string",
+      "description": "The site root url",
+      "pattern": "^https?:\/\/(www\\.)?([a-z0-9]+(-[a-z0-9]+)*)(\\.([a-z0-9]+(-[a-z0-9]+)*)){0,4}\\.[a-z]{2,3}(/[a-z0-9]+(-[a-z0-9]+)*)*/?$"
+    },
+    "title": {
+      "$ref": "#/$defs/text",
+      "description": "The site title"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The optional site decription",
+      "default": null
+    },
+    "keywords": {
+      "type": "array",
+      "description": "The optional site keywords",
+      "items": {
+        "$ref": "#/$defs/text",
+        "description": "A keyword"
+      },
+      "default": []
+    },
+    "author": {
+      "$ref": "#/$defs/text",
+      "description": "The site author"
+    },
+    "language": {
+      "type": "string",
+      "description": "The site language ISO 639-1 code",
+      "pattern": "^[a-z]{2}$"
+    },
+    "allowRobots": {
+      "type": "boolean",
+      "description": "Allow robots to index the site",
+      "default": false
+    },
+    "maxImageSize": {
+      "type": "object",
+      "description": "The maximum size of an image asset",
+      "default": {
+        "width": 2000,
+        "height": 2000
+      },
+      "properties": {
+        "width": {
+          "$ref": "#/$defs/resolution"
+        },
+        "height": {
+          "$ref": "#/$defs/resolution"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height"
+      ]
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "favicon": {
+          "$ref": "#/$defs/file"
+        },
+        "fonts": {
+          "$ref": "#/$defs/resourceDict"
+        },
+        "icons": {
+          "$ref": "#/$defs/resourceDict"
+        },
+        "scripts": {
+          "$ref": "#/$defs/resourceDict"
+        },
+        "styles": {
+          "$ref": "#/$defs/resourceDict"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "url",
+    "language",
+    "author",
+    "resources"
+  ]
+}

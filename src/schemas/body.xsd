@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:am="https://github.com/francescozoccheddu/ambagi/src/schemas/body.xsd"
+  targetNamespace="https://github.com/francescozoccheddu/ambagi/src/schemas/body.xsd"
+  elementFormDefault="qualified"
+>
+
+  <xs:element name="body">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="main">
+          <xs:complexType>
+            <xs:choice minOccurs="1" maxOccurs="unbounded">
+              <xs:element name="video" type="am:video" />
+              <xs:element name="image" type="am:image" />
+              <xs:element name="quote" type="am:paragraph" />
+              <xs:element name="paragraph" type="am:paragraph" />
+              <xs:element name="inline">
+                <xs:complexType>
+                  <xs:choice minOccurs="1" maxOccurs="1">
+                    <xs:element name="video" type="am:video" />
+                    <xs:element name="image" type="am:image" />
+                  </xs:choice>
+                  <xs:attribute name="position" use="required">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="left" />
+                        <xs:enumeration value="right" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="footnotes" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="footnote" minOccurs="0" maxOccurs="32">
+                <xs:complexType>
+                  <xs:choice minOccurs="1" maxOccurs="1">
+                    <xs:element name="video" type="am:video" />
+                    <xs:element name="image" type="am:image" />
+                    <xs:element name="text" type="am:paragraph" />
+                  </xs:choice>
+                  <xs:attribute name="key" type="am:footnote-key-string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+          <xs:unique name="unique-footnote-key">
+            <xs:selector xpath="am:footnote" />
+            <xs:field xpath="@key" />
+          </xs:unique>
+        </xs:element>
+        <xs:element name="credits" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="credit" minOccurs="0" maxOccurs="32" type="am:text" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+    <xs:key name="key-footnote-key">
+      <xs:selector xpath="am:footnotes/footnote" />
+      <xs:field xpath="@key" />
+    </xs:key>
+    <xs:keyref name="key-ref-footnote-key" refer="am:key-footnote-key">
+      <xs:selector xpath="am:main/p/fn" />
+      <xs:field xpath="@key" />
+    </xs:keyref>
+  </xs:element>
+
+  <xs:complexType name="paragraph" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="fn">
+        <xs:complexType>
+          <xs:attribute name="key" type="am:footnote-key-string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="e" type="am:non-empty-string" />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="text" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="e" type="am:non-empty-string" />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="media-source">
+    <xs:attribute name="asset" type="am:asset" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="image">
+    <xs:sequence>
+      <xs:element name="source" minOccurs="1" maxOccurs="1" type="am:media-source" />
+      <xs:element name="caption" type="am:text" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="video">
+    <xs:sequence>
+      <xs:element name="source" minOccurs="1" maxOccurs="4" type="am:media-source" />
+      <xs:element name="caption" type="am:text" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="manual" type="xs:boolean" default="false" use="optional" />
+    <xs:attribute name="thumbnail" type="am:asset" use="optional" />
+  </xs:complexType>
+
+  <xs:simpleType name="asset">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="[A-Za-z0-9\-\._ ]+" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="non-empty-string">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="footnote-key-string">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-z0-9]+(-[a-z0-9]+)*" />
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

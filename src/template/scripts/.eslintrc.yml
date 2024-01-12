@@ -1,0 +1,17 @@
+env:
+  browser: true
+  node: false
+  es6: true
+extends:
+  - "../../.eslintrc.yml"
+settings:
+  import/resolver:
+    typescript:
+      alwaysTryTypes: true
+      project: "./src/template/scripts/tsconfig.json"
+    node: false
+rules:
+  no-relative-import-paths/no-relative-import-paths:
+    - error
+    - rootDir: "./src/template/scripts"
+      prefix: "ambagi"

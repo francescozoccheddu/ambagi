@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://github.com/francescozoccheddu/ambagi/src/schemas/page.json",
+  "title": "Page",
+  "description": "The page definition",
+  "type": "object",
+  "$defs": {
+    "text": {
+      "type": "string",
+      "pattern": "^[a-zA-Z\u00E0-\u00FC\u00C0-\u00DC!?=():;.,\\-+\/*%&$\"'\u20AC#@#_<>]+(( )[a-zA-Z\u00E0-\u00FC\u00C0-\u00DC!?=():;.,\\-+\/*%&$\"'\u20AC#@#_<>]+)*$"
+    }
+  },
+  "properties": {
+    "url": {
+      "type": "string",
+      "description": "The page url segment",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "title": {
+      "$ref": "#/$defs/text",
+      "description": "The page title (without the site title)"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The optional page decription (without the site description)",
+      "default": null
+    },
+    "keywords": {
+      "type": "array",
+      "description": "The optional page keywords (without the site keywords)",
+      "items": {
+        "$ref": "#/$defs/text",
+        "description": "A keyword"
+      },
+      "default": []
+    },
+    "allowRobots": {
+      "type": "boolean",
+      "description": "Allow robots to index the page (if the site allows it too)",
+      "default": false
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "url"
+  ]
+}

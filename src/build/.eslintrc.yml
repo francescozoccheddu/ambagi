@@ -1,0 +1,43 @@
+env:
+  browser: false
+  node: true
+  es6: true
+extends:
+  - "../.eslintrc.yml"
+settings:
+  import/resolver:
+    typescript:
+      alwaysTryTypes: true
+      project: "./src/build/tsconfig.json"
+    node: true
+rules:
+  no-relative-import-paths/no-relative-import-paths:
+    - error
+    - rootDir: "./src/build/"
+      prefix: "ambagi"
+  "@typescript-eslint/ban-types":
+    - error
+    - types:
+        "String":
+          "fixWith": "Str"
+        "string":
+          "fixWith": "Str"
+        "boolean":
+          "fixWith": "Bool"
+        "Number":
+          "fixWith": "Num"
+        "number":
+          "fixWith": "Num"
+        "unknown":
+          "fixWith": "Unk"
+        "undefined":
+          "fixWith": "Und"
+        "null":
+          "fixWith": "Nul"
+        "Symbol":
+          "fixWith": "Sym"
+        "symbol":
+          "fixWith": "Sym"
+        "Array":
+          "fixWith": "Arr"
+      extendDefaults: true

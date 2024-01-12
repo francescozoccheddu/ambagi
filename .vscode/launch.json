@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/tsx",
+      "program": "${workspaceRoot}/src/build/main.ts",
+      "runtimeArgs": [
+        "--tsconfig",
+        "${workspaceRoot}/src/build/tsconfig.json",
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/node_modules/**",
+      ],
+    }
+  ]
+}
