@@ -3,7 +3,7 @@
     "source.fixAll": "always"
   },
   "liveServer.settings.root": "/dist",
-  "liveServer.settings.wait": 5000,
+  "liveServer.settings.wait": 1500,
   "editor.formatOnSave": true,
   "typescript.tsdk": "node_modules/typescript/lib"
 }

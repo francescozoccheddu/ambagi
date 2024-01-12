@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Personal blog",
   "scripts": {
-    "start": "tsx --tsconfig ./src/build/tsconfig.json ./src/build/main.ts",
+    "build": "tsx --tsconfig ./src/build/tsconfig.json ./src/build/main.ts build",
+    "dev": "tsx --tsconfig ./src/build/tsconfig.json ./src/build/main.ts dev",
     "lint": "tsc --noEmit --project ./src/build/tsconfig.json && eslint ./src/build"
   },
   "repository": {

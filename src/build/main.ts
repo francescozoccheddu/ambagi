@@ -1,11 +1,27 @@
 import '@francescozoccheddu/ts-goodies/globals/essentials';
 
+import { err } from '@francescozoccheddu/ts-goodies/errors';
 import { prExc } from '@francescozoccheddu/ts-goodies/logs';
-import { watch } from 'ambagi/pipeline/watch';
+import { devSite } from 'ambagi/pipeline/dev';
+import { buildSite } from 'ambagi/pipeline/site';
 
 async function main(): Promise<void> {
   try {
-    await watch();
+    const args = process.argv.slice(2);
+    if (args.length !== 1) {
+      err(`Expected 1 argument, got ${args.length}`);
+    }
+    const arg = args[0]!;
+    switch (arg) {
+      case 'build':
+        await buildSite();
+        break;
+      case 'dev':
+        await devSite();
+        break;
+      default:
+        err('Unexpected argument', { allowed: ['build', 'dev'], got: arg });
+    }
   } catch (e) {
     prExc(e, 'Error occurred');
     process.exit(1);

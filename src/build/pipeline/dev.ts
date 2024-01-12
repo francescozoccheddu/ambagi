@@ -5,7 +5,7 @@ import { watch as chokidarWatch } from 'chokidar';
 
 const delay = 0.5;
 
-export async function watch(): Promise<void> {
+export async function devSite(): Promise<void> {
   let timeoutId: NodeJS.Timeout | Nul = null;
   let updating = false;
   let needsUpdate = false;

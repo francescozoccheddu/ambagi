@@ -4,23 +4,26 @@
 html
   scroll-behavior: smooth
 
-#logo
-  margin-bottom: -0.25em
-
-#title
-  margin-top: 0em
-  margin-bottom: 1.7em
-
 #main
-  padding: 7em 1em 6em 1em
+  padding: 7rem 1rem 6rem 1rem
   @media (min-width: breakpoints.$mdMinWidth)
-    padding: 7em 1.5em 6em 1.5em
+    padding: 7rem 1.5rem 6rem 1.5rem
   @media (min-width: breakpoints.$lgMinWidth)
-    padding: 7em 2em 6em 2em
+    padding: 7rem 2rem 6rem 2rem
+
+  #logo
+    margin-bottom: -0.25rem
+
+  #title
+    margin-top: 0rem
+    margin-bottom: 1.7rem
+
+  #body
+    margin: 5rem 0rem
 
   figure
-    padding: 0em
-    margin: 2em 0em
+    padding: 0rem
+    margin: 2rem 0rem
     width: 100%
 
     video, img
@@ -29,7 +32,7 @@ html
       height: auto
 
     figcaption
-      margin: 1em 2em 0em 2em
+      margin: 1rem 2rem 0rem 2rem
 
   .inline
     overflow: hidden
@@ -49,7 +52,7 @@ html
       width: 400px
 
       figure
-        margin: 0.4em 0em 0.2em 0em
+        margin: 0.4rem 0rem 0.2rem 0rem
 
     @media (min-width: breakpoints.$lgMinWidth)
       width: 500px
@@ -58,11 +61,11 @@ html
 
   .inline[data-float="left"]
     float: left
-    margin-right: 1.5em
+    margin-right: 1.5rem
 
   .inline[data-float="right"]
     float: right
-    margin-left: 1.5em
+    margin-left: 1.5rem
 
   .inline[data-offset="left"]
     video
@@ -73,39 +76,42 @@ html
       object-position: right
 
   #footnotes
-    margin: 6em 0em
+    margin: 5rem 0rem
 
     .footnote
       display: flex
       flex-direction: row
-      gap: 0.8em
-      padding: 1em 2em
-      border-radius: 0.25em
+      gap: 0.7rem
+      padding: 1rem 1.4rem 1rem 0rem
+      border-radius: 0.25rem
+      @media (min-width: breakpoints.$mdMinWidth)
+        padding: 1rem 2rem 1rem 0rem
+        gap: 0.8rem
 
       .footnote-head
-        width: 1em
+        width: 1rem
         text-align: right
+        @media (min-width: breakpoints.$mdMinWidth)
+          width: 1.5rem
 
       .footnote-body
         flex: 1 0 0
 
         p, figure
-          margin: 0em
+          margin: 0rem
 
         figure
           max-width: 50%
 
   #credits
-    padding: 2em 2em
+    margin: 2rem 1.4rem
     @media (min-width: breakpoints.$mdMinWidth)
-      padding: 2em 3em
-    @media (min-width: breakpoints.$lgMinWidth)
-      padding: 2em 4em
+      margin: 2rem 2rem
 
     .credit
-      margin-top: 0.7em
-      margin-bottom: 0.7em
+      margin-top: 0.7rem
+      margin-bottom: 0.7rem
 
   #author
-    margin-top: 3em
-    margin-bottom: 2em
+    margin-top: 5rem
+    margin-bottom: 5rem
