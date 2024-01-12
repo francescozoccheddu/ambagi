@@ -51,7 +51,7 @@ function visitEl(el: XmlElement | Und): Unk {
             audio: attrs['audio'] === 'true',
             manual: attrs['manual'] === 'true',
             sources: els.filter(e => e.name === 'source').map(visitEl),
-            caption: (visitEl(els.filter(e => e.name === 'caption')[0]) as BodyParagraph).children,
+            caption: (visitEl(els.filter(e => e.name === 'caption')[0]) as BodyParagraph)?.children,
             thumbnails: attrs['thumbnail']?.toString() ?? null,
             alt: attrs['alt']?.toString() ?? null,
             thumbnailTime: toFloatOrNul(attrs['thumbnailTime']?.toString() ?? null),
@@ -60,7 +60,7 @@ function visitEl(el: XmlElement | Und): Unk {
           return <BodyImage<true>>{
             kind: BodyElementKind.image,
             sources: els.filter(e => e.name === 'source').map(visitEl)[0],
-            caption: visitEl(els.filter(e => e.name === 'caption')[0]),
+            caption: (visitEl(els.filter(e => e.name === 'caption')[0]) as BodyParagraph)?.children,
             alt: attrs['alt']?.toString() ?? null,
           };
         case 'caption':
