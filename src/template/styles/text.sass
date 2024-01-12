@@ -10,7 +10,6 @@
   color: colors.$key
   font-family: fonts.$body-norm
   font-size: 1rem
-  line-height: 1.65
 
   em
     font-family: fonts.$body-emph
@@ -23,11 +22,14 @@
 
   #title
     font-family: fonts.$head
-    font-size: 2.5rem
+    font-size: 2rem
     text-align: left
     hyphens: auto
+    @media (min-width: breakpoints.$mdMinWidth)
+      font-size: 2.5rem
 
   #body
+    line-height: 1.65
     text-align: justify
 
   #author
@@ -37,15 +39,17 @@
 
   #footnotes
     font-size: 0.8rem
+    line-height: 1.65
     text-align: justify
 
   #credits
+    line-height: 1.65
     font-size: 0.6rem
     color: colors.$mut
     text-align: justify
 
   figcaption
-    font-size: 0.8rem
+    font-size: 0.7rem
     color: colors.$mut
     text-align: center
 
