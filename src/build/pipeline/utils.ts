@@ -1,3 +1,4 @@
+import { prDebug } from '@francescozoccheddu/ts-goodies/logs';
 import { isStr } from '@francescozoccheddu/ts-goodies/types';
 import { SiteConf } from 'ambagi/pipeline/conf';
 import { dirs } from 'ambagi/utils/dirs';
@@ -80,4 +81,21 @@ export class PageResource {
         : `data:${this.mimeType};base64,${this._data.toString('base64')}`;
   }
 
+}
+
+let logOpLevel: Num = 0;
+
+export function log(msg: Str): void {
+  const prefix = '  '.repeat(logOpLevel);
+  prDebug(prefix + msg.replaceAll('\n', '\n' + prefix));
+}
+
+export function pushLog(msg?: Str): void {
+  if (msg) log(msg);
+  logOpLevel++;
+}
+
+export function popLog(msg?: Str): void {
+  logOpLevel--;
+  if (msg) log(msg);
 }

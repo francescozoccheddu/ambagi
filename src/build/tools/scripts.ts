@@ -23,7 +23,6 @@ export async function buildScript(sourceFile: Str, replacements: RStrObj<RJson> 
     context: dirs.scripts,
     input: sourceFile,
     output: {
-      dir: dirs.dist,
       format: 'iife',
       sourcemap: dev ? 'inline' : false,
     },
