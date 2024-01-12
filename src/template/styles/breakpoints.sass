@@ -1,30 +1,21 @@
-$mdMinWidth: 768px
-$lgMinWidth: 992px
-$xlMinWidth: 1200px
+$xsMaxWidth: 575px
+$smMaxWidth: 767px
+$mdMaxWidth: 991px
+$lgMaxWidth: 1199px
+$xlMaxWidth: 1399px
 
-html
-  font-size: 16px
+@mixin xs
+  @media (max-width: $xsMaxWidth)
+    @content
 
-@media (min-width: $mdMinWidth)
+@mixin sm
+  @media (max-width: $smMaxWidth)
+    @content
 
-  html
-    font-size: 17px
+@mixin md
+  @media (max-width: $mdMaxWidth)
+    @content
 
-  #main
-    max-width: 720px
-
-@media (min-width: $lgMinWidth)
-
-  html
-    font-size: 18px
-
-  #main
-    max-width: 950px
-
-@media (min-width: $xlMinWidth)
-
-  html
-    font-size: 19px
-
-  #main
-    max-width: 1150px
+@mixin lg
+  @media (max-width: $lgMaxWidth)
+    @content

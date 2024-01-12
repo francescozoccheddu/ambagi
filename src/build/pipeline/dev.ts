@@ -1,3 +1,4 @@
+import { prExc } from '@francescozoccheddu/ts-goodies/logs';
 import { buildSite } from 'ambagi/pipeline/site';
 import { popLog, pushLog } from 'ambagi/pipeline/utils';
 import { dirs } from 'ambagi/utils/dirs';
@@ -18,7 +19,11 @@ export async function devSite(): Promise<void> {
     needsUpdate = false;
     const startTime = performance.now();
     pushLog('Rebuilding');
-    await buildSite();
+    try {
+      await buildSite();
+    } catch (e) {
+      prExc(e, 'Error while rebuilding');
+    }
     const endTime = performance.now();
     popLog(`Done (${((endTime - startTime) / 1000).toFixed(3)}s)`);
     if (needsUpdate && !timeoutId) {
