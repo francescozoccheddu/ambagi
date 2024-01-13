@@ -1,4 +1,4 @@
-import { arrow, autoUpdate, computePosition, flip, limitShift, offset, shift } from '@floating-ui/dom';
+import { arrow, autoUpdate, computePosition, flip, hide as hideMw, limitShift, offset, shift } from '@floating-ui/dom';
 
 export function setupTooltips(): void {
   const links = Array.from(document.getElementsByClassName('footnote-link')) as HTMLElement[] as readonly HTMLElement[];
@@ -13,6 +13,8 @@ export function setupTooltips(): void {
 
 const showDelayMs = 500;
 const hideDelayMs = 200;
+const doubleClickMaxDelayMs = 200;
+const clickAfterShowMinDelayMs = 500;
 
 type TooltipInstance = Readonly<{
   tooltip: HTMLElement;
@@ -23,7 +25,12 @@ type TooltipInstance = Readonly<{
 
 function setupTooltip(link: HTMLElement, content: HTMLElement): void {
   let timer: ReturnType<typeof setTimeout> | null = null;
+  let lastClickTime: number = 0;
+  let lastFirstOpenTime: number = 0;
   let elements: TooltipInstance | null = null;
+  function getOpacity(): number {
+    return (elements?.tooltip.computedStyleMap().get('opacity') as CSSUnitValue | undefined)?.value ?? 0;
+  }
   function updatePosition(): void {
     if (elements) {
       void computePosition(link, elements.tooltip, {
@@ -40,6 +47,9 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
           }),
           offset(10),
           arrow({ element: elements.arrow }),
+          hideMw({
+            strategy: 'escaped',
+          }),
         ],
       }).then(v => {
         if (elements) {
@@ -56,6 +66,9 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
             right: '',
             bottom: '',
           });
+          if (v.middlewareData.hide!.escaped) {
+            hide();
+          }
         }
       });
     }
@@ -77,12 +90,11 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
   function show(): void {
     clearTimer();
     if (elements === null) {
+      lastFirstOpenTime = performance.now();
       const ttEl = document.createElement('div');
       ttEl.className = 'tooltip';
       ttEl.addEventListener('transitionend', e => {
-        if (elements && e.propertyName === 'opacity'
-          && !ttEl.classList.contains('show')
-          && (ttEl.computedStyleMap().get('opacity') as CSSUnitValue).value < 0.25) {
+        if (elements && e.propertyName === 'opacity' && !ttEl.classList.contains('show') && getOpacity() < 0.25) {
           elements.cancelAutoUpdate();
           elements.tooltip.remove();
           elements = null;
@@ -92,7 +104,7 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
       ttContentEl.className = 'tooltip-content';
       ttContentEl.addEventListener('mouseenter', () => {
         elements?.tooltip.classList.add('hovered');
-        if (elements && (ttEl.computedStyleMap().get('opacity') as CSSUnitValue).value > 0.25) {
+        if (elements && getOpacity() > 0.25) {
           show();
         }
       });
@@ -118,7 +130,7 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
   }
   link.addEventListener('mouseenter', () => {
     elements?.tooltip.classList.add('hovered');
-    if (elements && (elements.tooltip.computedStyleMap().get('opacity') as CSSUnitValue).value > 0.25) {
+    if (elements && getOpacity()) {
       show();
     }
     else {
@@ -128,5 +140,17 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
   link.addEventListener('mouseleave', () => {
     elements?.tooltip.classList.remove('hovered');
     setTimer(hide, hideDelayMs);
+  });
+  link.addEventListener('click', e => {
+    const now = performance.now();
+    const isDoubleClick = now - lastClickTime < doubleClickMaxDelayMs;
+    lastClickTime = now;
+    if (!isDoubleClick && (getOpacity() < 0.9 || (now - lastFirstOpenTime < clickAfterShowMinDelayMs))) {
+      e.preventDefault();
+      show();
+      return true;
+    }
+    hide();
+    return false;
   });
 }
