@@ -12,7 +12,7 @@ mixin run(children)
       when "footnoteLink"
         - const i = body.footnotes.findIndex(fn => fn.key === ch.key)
         - const idx = i + 1
-        a.footnote-link(tabIndex=-1 id=`fnl-${idx}` href=`#fn-${idx}` data-index=idx)
+        a.footnote-link(tabIndex=-1 id=`fnl-${idx}` href=`#fn-${idx}` data-index=i)
           sup #{text("bodyNorm", idx)}
 
 mixin paragraph(paragraph)
@@ -33,17 +33,16 @@ mixin img(sources, alt)
 
 
 mixin media(element)
-  case element.kind
-    when "video"
-      figure
+  figure
+    case element.kind
+      when "video"
         video(width=element.sources[0].width height=element.sources[0].height muted=(!element.manual || !element.sources[0].audio) controls=element.manual autoplay=!element.manual playsinline=!element.manual disablepictureinpicture loop=!element.manual poster=element.thumbnails[0].uri)
           each src in element.sources
             source(src=src.uri type=src.info.type)
         if element.caption
           figcaption 
             +run(element.caption)
-    when "image"
-      figure
+      when "image"
         +img(element.sources, element.alt)
         if element.caption
           figcaption 
@@ -83,7 +82,6 @@ html(lang=siteConf.language)
     noscript 
       style #{res.styles.noscript.inline}
     // TODO: Remove
-    style #{res.styles.noscript.inline} 
   body
     #loading
       #loading-content !{res.icons.loading.inline}
@@ -101,7 +99,7 @@ html(lang=siteConf.language)
               - const idx = i + 1
               .footnote(data-index=idx id=`fn-${idx}` role="note")
                 .footnote-head
-                  a.footnote-rlink(tabindex=-1 href=`#fnl-${idx}` data-index=idx)
+                  a.footnote-rlink(tabindex=-1 href=`#fnl-${idx}`)
                     sup #{idx}
                 .footnote-body
                   +element(fn.child)

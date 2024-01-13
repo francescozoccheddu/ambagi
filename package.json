@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/francescozoccheddu/ambagi#readme",
   "dependencies": {
+    "@floating-ui/dom": "^1.5.4",
     "@francescozoccheddu/reload-please": "^0.0.3",
     "@francescozoccheddu/ts-goodies": "^0.0.6",
     "@rollup/plugin-babel": "^6.0.4",

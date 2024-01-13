@@ -1,0 +1,50 @@
+@use './colors'
+
+$arrowHeight: 10px
+$arrowOffs: calc($arrowHeight * -1)
+$arrowWidth: calc($arrowHeight * 0.8666)
+
+.tooltip
+  position: absolute
+  max-width: 400px
+  max-width: min(400px, calc(100vw - 3rem))
+  background: colors.$ttip
+  box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.25)
+  border-radius: 0.25rem
+  padding: 0.4rem
+  top: 0
+  left: 0
+
+  &[data-placement="bottom"]
+    .arrow
+      rotate: 0deg
+      top: $arrowOffs
+
+  &[data-placement="top"]
+    .arrow
+      rotate: 180deg
+      bottom: $arrowOffs
+
+  &[data-placement="left"]
+    .arrow
+      rotate: 90deg
+      right: $arrowOffs
+
+  &[data-placement="right"]
+    .arrow
+      rotate: 270deg
+      left: $arrowOffs
+
+  .arrow
+    position: absolute
+    height: 0px
+    width: 0px
+    border-left: $arrowWidth solid transparent
+    border-right: $arrowWidth solid transparent
+    border-bottom: $arrowHeight solid colors.$ttip
+
+  p
+    margin: 0.7rem 0.9rem
+
+  figure
+    margin: 0rem
