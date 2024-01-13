@@ -1,0 +1,78 @@
+@use './breakpoints'
+@use './colors'
+
+figure
+  padding: 0rem
+  margin-inline: 0rem
+  margin-block: 2rem
+  width: 100%
+
+video, img
+  display: block
+  width: 100%
+  height: auto
+
+figcaption
+  margin: 0.7rem 2rem 0rem 2rem
+
+.inline
+  overflow: hidden
+  width: 600px
+
+  video, img
+    object-fit: cover
+    height: 400px
+
+  figure
+    margin-block: 0.4rem
+
+  &[data-float="left"]
+    float: left
+    margin-right: 1.75rem
+
+  &[data-float="right"]
+    float: right
+    margin-left: 1.75rem
+
+  &[data-offset="left"]
+    video
+      object-position: left
+
+  &[data-offset="right"]
+    video
+      object-position: right
+
+@include breakpoints.lg
+  .inline
+    width: 480px
+
+    video, img
+      height: 360px
+
+@include breakpoints.md
+  .inline
+    width: 400px
+
+    video, img
+      height: 300px
+
+@include breakpoints.sm
+  .inline
+    width: 100%
+
+    video, img
+      height: auto
+
+    figure
+      margin-block: 1.5rem 1.75rem
+
+  figure
+    margin-block: 1.5rem 1.75rem
+
+@include breakpoints.xs
+  .inline
+    figure
+      margin-block: 1.25rem 1.5rem
+
+  figure
+    margin-block: 1.25rem 1.5rem

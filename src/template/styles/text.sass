@@ -4,74 +4,85 @@
 
 html
   font-size: 19px
-  @include breakpoints.md
-    font-size: 18px
-  @include breakpoints.sm
-    font-size: 17px
-  @include breakpoints.xs
-    font-size: 16px
 
 *
   user-select: none
 
 #main
-  margin: auto
   color: colors.$key
   font-family: fonts.$body-norm
   font-size: 1rem
 
-  em
-    font-family: fonts.$body-emph
+em
+  font-family: fonts.$body-emph
 
-  #logo
-    font-family: fonts.$logo
-    font-size: 2.5rem
-    text-align: left
-    line-height: 1
+#logo
+  font-family: fonts.$logo
+  font-size: 2.5rem
+  text-align: left
+  line-height: 1
+
+#title
+  font-family: fonts.$head
+  font-size: 2.5rem
+  text-align: left
+  hyphens: auto
+
+#body
+  line-height: 1.65
+  text-align: justify
+
+#author
+  font-family: fonts.$logo
+  color: colors.$mut
+  text-align: center
+
+#footnotes
+  font-size: 0.8rem
+  line-height: 1.65
+  text-align: justify
+
+#credits
+  line-height: 1.65
+  font-size: 0.6rem
+  color: colors.$mut
+  text-align: justify
+
+figcaption
+  font-size: 0.7rem
+  color: colors.$mut
+  text-align: center
+
+a
+  color: inherit
+  text-decoration: none
+  transition: opacity 0.2s ease
+
+  &:focus, &:focus-visible
+    opacity: 1
+    outline: none
+    box-shadow: none
+
+  &:hover
+    opacity: 0.7
+
+  &:active
+    opacity: 0.5
+
+@include breakpoints.md
+  html
+    font-size: 18px
+
+@include breakpoints.sm
+  html
+    font-size: 17px
 
   #title
-    font-family: fonts.$head
-    font-size: 2.5rem
-    text-align: left
-    hyphens: auto
+    font-size: 2.25rem
 
-  #body
-    line-height: 1.65
-    text-align: justify
+@include breakpoints.xs
+  html
+    font-size: 16px
 
-  #author
-    font-family: fonts.$logo
-    color: colors.$mut
-    text-align: center
-
-  #footnotes
-    font-size: 0.8rem
-    line-height: 1.65
-    text-align: justify
-
-  #credits
-    line-height: 1.65
-    font-size: 0.6rem
-    color: colors.$mut
-    text-align: justify
-
-  figcaption
-    font-size: 0.7rem
-    color: colors.$mut
-    text-align: center
-
-  a
-    color: inherit
-    text-decoration: none
-    transition: opacity 0.2s ease
-
-    &:focus, &:focus-visible
-      opacity: 1
-      outline: none
-      box-shadow: none
-
-    &:hover
-      opacity: 0.7
-
-    &:active
-      opacity: 0.5
+  #title
+    font-size: 2rem

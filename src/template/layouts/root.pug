@@ -87,29 +87,30 @@ html(lang=siteConf.language)
   body
     #loading
       #loading-content !{res.icons.loading.inline}
-    main#main
-      section#header
+    main#main(role="main")
+      header#header
         h1#logo #{text("logo", siteConf.title.toLowerCase())}
         h2#title #{text("head", pageConf.title)}
-      section#body
+      article#body
         each el in body.main
           +element(el)
-      if body.footnotes.length > 0
-        section#footnotes
-          each fn, i in body.footnotes
-            - const idx = i + 1
-            .footnote(data-index=idx id=`fn-${idx}`)
-              .footnote-head
-                a.footnote-rlink(tabindex=-1 href=`#fnl-${idx}` data-index=idx)
-                  sup #{idx}
-              .footnote-body
-                +element(fn.child)
-      if body.credits.length > 0
-        section#credits
-          each cr in body.credits
-            .credit
-              +run(cr.children)
-      section#author #{text("logo", siteConf.author)}
+      footer
+        if body.footnotes.length > 0
+          section#footnotes
+            each fn, i in body.footnotes
+              - const idx = i + 1
+              .footnote(data-index=idx id=`fn-${idx}` role="note")
+                .footnote-head
+                  a.footnote-rlink(tabindex=-1 href=`#fnl-${idx}` data-index=idx)
+                    sup #{idx}
+                .footnote-body
+                  +element(fn.child)
+        if body.credits.length > 0
+          section#credits(role="doc-credits")
+            each cr in body.credits
+              .credit
+                +run(cr.children)
+        section#author #{text("logo", siteConf.author)}
   script(src=res.scripts.main.url)
   if devScript !== null
     script

@@ -1,0 +1,49 @@
+@use './breakpoints'
+@use './colors'
+
+#footnotes
+  margin-block: 5rem
+
+.footnote
+  display: flex
+  flex-direction: row
+  gap: 0.6rem
+  padding: 1rem 2rem 1rem 0rem
+  border-radius: 0.25rem
+  transition: background-color 1s ease
+
+.footnote-head
+  width: 1.5rem
+  text-align: right
+
+.footnote-body
+  flex: 1 0 0
+
+  p, figure
+    margin: 0rem
+
+  figure
+    width: 50%
+
+  &:target
+    scroll-margin-top: 2rem
+    background-color: colors.$fnbg
+
+#credits
+  margin: 2rem
+
+  .credit
+    margin-block: 0.7rem
+
+#author
+  margin-block: 5rem
+
+@include breakpoints.sm
+  .footnote-body
+    figure
+      width: 75%
+
+@include breakpoints.xs
+  .footnote-body
+    figure
+      width: 100%
