@@ -5,6 +5,7 @@ import { popLog, pushLog } from 'ambagi/pipeline/utils';
 import { dirs } from 'ambagi/utils/dirs';
 import { dev, setEnvironment } from 'ambagi/utils/env';
 import { watch as chokidarWatch } from 'chokidar';
+import fs from 'fs';
 import Koa from 'koa';
 import koaStatic from 'koa-static';
 
@@ -31,6 +32,8 @@ async function watch(): Promise<void> {
     }
     const endTime = performance.now();
     popLog(`Done (${((endTime - startTime) / 1000).toFixed(3)}s)`);
+    fs.rmSync(dirs.distDev, { recursive: true, force: true });
+    fs.cpSync(dirs.dist, dirs.distDev, { recursive: true, force: true, errorOnExist: false });
     reloadServer.reload();
     if (needsUpdate && !timeoutId) {
       setTimeout(() => void update());
@@ -66,6 +69,8 @@ async function watch(): Promise<void> {
 export async function devSite(): Promise<void> {
   const wasDev = dev;
   setEnvironment(true);
+  fs.rmSync(dirs.distDev, { recursive: true, force: true });
+  fs.mkdirSync(dirs.distDev);
   const koa = new Koa();
   koa.use(koaStatic(dirs.dist));
   const port = 5500;
@@ -81,4 +86,5 @@ export async function devSite(): Promise<void> {
   }
   server.close();
   server.closeAllConnections();
+  fs.rmSync(dirs.distDev, { recursive: true, force: true });
 }

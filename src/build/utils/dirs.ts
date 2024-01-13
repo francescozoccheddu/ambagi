@@ -5,6 +5,7 @@ import path from 'path';
 const packageJsonFile: Str = findPackageJson().next().filename ?? err('Cannot find \'package.json\'');
 const root = path.dirname(packageJsonFile);
 const dist = path.join(root, 'dist');
+const distDev = path.join(root, 'dist-dev');
 const src = path.join(root, 'src');
 const schemas = path.join(src, 'schemas');
 const build = path.join(src, 'build');
@@ -20,5 +21,5 @@ const distStaticBaseName = 'static';
 const distStatic = path.join(dist, distStaticBaseName);
 
 export const dirs = {
-  root, dist, src, schemas, build, pages, template, fonts, layouts, scripts, styles, icons, favicon, distStatic, distStaticBaseName,
+  root, dist, distDev, src, schemas, build, pages, template, fonts, layouts, scripts, styles, icons, favicon, distStatic, distStaticBaseName,
 } as const;
