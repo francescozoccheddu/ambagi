@@ -2,7 +2,7 @@ import { toObj } from '@francescozoccheddu/ts-goodies/arrays';
 import { mapValues, toArr } from '@francescozoccheddu/ts-goodies/objects';
 import { SiteConf } from 'ambagi/pipeline/conf';
 import { buildPage } from 'ambagi/pipeline/page';
-import { BuildPageConf, emitData, log, PageResource, popLog, pushLog } from 'ambagi/pipeline/utils';
+import { BuildPageConf, cleanDist, emitData, log, PageResource, popLog, pushLog } from 'ambagi/pipeline/utils';
 import { makeYamlLoader, YamlLoader } from 'ambagi/tools/data';
 import { buildFavicon } from 'ambagi/tools/favicon';
 import { buildIcon } from 'ambagi/tools/icons';
@@ -13,7 +13,6 @@ import { dirs } from 'ambagi/utils/dirs';
 import { joinUrl } from 'ambagi/utils/urls';
 import fs from 'fs';
 import path from 'path';
-import { rimraf } from 'rimraf';
 
 async function mapValuesAsync<TV>(obj: RStrObj<Str>, map: (file: Str) => Promise<TV>): Promise<RStrObj<TV>> {
   return toObj(await Promise.all(toArr(obj).map(async ([k, v]) => [k, await (map(v))])));
@@ -23,9 +22,7 @@ let siteConfLoader: YamlLoader<SiteConf> | Nul = null;
 
 export async function buildSite(): Promise<void> {
   log('Clean');
-  await rimraf(dirs.dist);
-  fs.mkdirSync(dirs.dist);
-  fs.mkdirSync(dirs.distStatic);
+  cleanDist();
   log('Load config');
   siteConfLoader ??= makeYamlLoader<SiteConf>(path.join(dirs.schemas, 'site.json'));
   const siteConf = siteConfLoader(path.join(dirs.template, 'site.yml'));

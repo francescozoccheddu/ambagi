@@ -20,6 +20,12 @@ export function emitFile(file: Str, name: Str = randomStaticName()): Str {
   return name;
 }
 
+export function cleanDist(): void {
+  fs.rmSync(dirs.dist, { force: true, recursive: true });
+  fs.mkdirSync(dirs.dist);
+  fs.mkdirSync(dirs.distStatic);
+}
+
 export function mimeToExt(mimeType: Str): Str | Nul {
   return {
     'image/jpeg': 'jpg',

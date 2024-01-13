@@ -1,4 +1,5 @@
 /dist/
+/dist-dev/
 /.vscode/*
 !/.vscode/extensions.json
 !/.vscode/launch.json

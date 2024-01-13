@@ -12,6 +12,10 @@
   border-radius: 0.25rem
   transition: background-color 1s ease
 
+  &:target
+    scroll-margin-top: 2rem
+    background-color: colors.$fnbg
+
 .footnote-head
   width: 1.5rem
   text-align: right
@@ -24,10 +28,6 @@
 
   figure
     width: 50%
-
-  &:target
-    scroll-margin-top: 2rem
-    background-color: colors.$fnbg
 
 #credits
   margin: 2rem
