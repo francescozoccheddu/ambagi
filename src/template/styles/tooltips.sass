@@ -1,41 +1,29 @@
 @use './colors'
 
 $arrowHeight: 10px
-$arrowOffs: calc($arrowHeight * -1)
 $arrowWidth: calc($arrowHeight * 0.8666)
+$arrowOffs: calc($arrowHeight * -1)
+
+$slideOpacity: 0.5
+$slideDuration: 0.2s
+$slideOffs: 0.15rem
+$slideOffsNeg: calc($slideOffs * -1)
 
 .tooltip
   position: absolute
   max-width: 400px
   max-width: min(400px, calc(100vw - 3rem))
-  background: colors.$ttip
-  box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.25)
-  border-radius: 0.25rem
-  padding: 0.4rem
-  top: 0
-  left: 0
+  transition: opacity 0.5s linear
+  opacity: 0
 
-  &[data-placement="bottom"]
-    .arrow
-      rotate: 0deg
-      top: $arrowOffs
+  &.show
+    transition: opacity 0.3s linear
+    opacity: 1
 
-  &[data-placement="top"]
-    .arrow
-      rotate: 180deg
-      bottom: $arrowOffs
+  &.hovered
+    opacity: 1
 
-  &[data-placement="left"]
-    .arrow
-      rotate: 90deg
-      right: $arrowOffs
-
-  &[data-placement="right"]
-    .arrow
-      rotate: 270deg
-      left: $arrowOffs
-
-  .arrow
+  .tooltip-arrow
     position: absolute
     height: 0px
     width: 0px
@@ -43,8 +31,74 @@ $arrowWidth: calc($arrowHeight * 0.8666)
     border-right: $arrowWidth solid transparent
     border-bottom: $arrowHeight solid colors.$ttip
 
-  p
-    margin: 0.7rem 0.9rem
+  .tooltip-content
+    background: colors.$ttip
+    box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.25)
+    border-radius: 0.25rem
+    padding: 0.4rem
 
-  figure
-    margin: 0rem
+    p
+      margin: 0.7rem 0.9rem
+
+    figure
+      margin: 0rem
+
+  &[data-placement="bottom"]
+    .tooltip-content
+      animation: slide-bottom $slideDuration ease-out
+    .tooltip-arrow
+      rotate: 0deg
+      top: $arrowOffs
+
+  &[data-placement="top"]
+    .tooltip-content
+      animation: slide-top $slideDuration ease-out
+    .tooltip-arrow
+      rotate: 180deg
+      bottom: $arrowOffs
+
+  &[data-placement="left"]
+    .tooltip-content
+      animation: slide-left $slideDuration ease-out
+    .tooltip-arrow
+      rotate: 90deg
+      right: $arrowOffs
+
+  &[data-placement="right"]
+    .tooltip-content
+      animation: slide-right $slideDuration ease-out
+    .tooltip-arrow
+      rotate: 270deg
+      left: $arrowOffs
+
+@keyframes slide-bottom
+  0%
+    opacity: $slideOpacity
+    translate: 0rem $slideOffsNeg
+  100%
+    opacity: 1
+    translate: 0rem 0rem
+
+@keyframes slide-top
+  0%
+    opacity: $slideOpacity
+    translate: 0rem $slideOffs
+  100%
+    opacity: 1
+    translate: 0rem 0rem
+
+@keyframes slide-left
+  0%
+    opacity: $slideOpacity
+    translate: $slideOffs 0rem
+  100%
+    opacity: 1
+    translate: 0rem 0rem
+
+@keyframes slide-right
+  0%
+    opacity: $slideOpacity
+    translate: $slideOffsNeg 0rem
+  100%
+    opacity: 1
+    translate: 0rem 0rem

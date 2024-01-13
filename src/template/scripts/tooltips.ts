@@ -1,4 +1,4 @@
-import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { arrow, autoUpdate, computePosition, flip, limitShift, offset, shift } from '@floating-ui/dom';
 
 export function setupTooltips(): void {
   const links = Array.from(document.getElementsByClassName('footnote-link')) as HTMLElement[] as readonly HTMLElement[];
@@ -23,7 +23,6 @@ type TooltipInstance = Readonly<{
 
 function setupTooltip(link: HTMLElement, content: HTMLElement): void {
   let timer: ReturnType<typeof setTimeout> | null = null;
-  let shown = false;
   let elements: TooltipInstance | null = null;
   function updatePosition(): void {
     if (elements) {
@@ -35,6 +34,9 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
           }),
           shift({
             padding: 20,
+            limiter: limitShift({
+              offset: 20,
+            }),
           }),
           offset(10),
           arrow({ element: elements.arrow }),
@@ -64,55 +66,67 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
       timer = null;
     }
   }
+  function setTimer(callback: () => void, delay: number): void {
+    clearTimer();
+    timer = setTimeout(callback, delay);
+  }
   function hide(): void {
-    if (!shown) {
-      return;
-    }
-    shown = false;
-    elements?.tooltip.remove();
-    elements?.cancelAutoUpdate();
-    elements = null;
+    clearTimer();
+    elements?.tooltip.classList.remove('show', 'hovered');
   }
   function show(): void {
-    if (shown) {
-      return;
+    clearTimer();
+    if (elements === null) {
+      const ttEl = document.createElement('div');
+      ttEl.className = 'tooltip';
+      ttEl.addEventListener('transitionend', e => {
+        if (elements && e.propertyName === 'opacity'
+          && !ttEl.classList.contains('show')
+          && (ttEl.computedStyleMap().get('opacity') as CSSUnitValue).value < 0.25) {
+          elements.cancelAutoUpdate();
+          elements.tooltip.remove();
+          elements = null;
+        }
+      });
+      const ttContentEl = document.createElement('div');
+      ttContentEl.className = 'tooltip-content';
+      ttContentEl.addEventListener('mouseenter', () => {
+        elements?.tooltip.classList.add('hovered');
+        if (elements && (ttEl.computedStyleMap().get('opacity') as CSSUnitValue).value > 0.25) {
+          show();
+        }
+      });
+      ttContentEl.addEventListener('mouseleave', () => {
+        elements?.tooltip.classList.remove('hovered');
+        setTimer(hide, hideDelayMs);
+      });
+      const ttArrowEl = document.createElement('div');
+      ttArrowEl.className = 'tooltip-arrow';
+      const contentEl = content.cloneNode(true);
+      ttContentEl.append(contentEl);
+      ttContentEl.append(ttArrowEl);
+      ttEl.append(ttContentEl);
+      elements = {
+        arrow: ttArrowEl,
+        tooltip: ttEl,
+        video: null,
+        cancelAutoUpdate: autoUpdate(link, ttEl, updatePosition),
+      };
+      document.body.append(ttEl);
     }
-    shown = true;
-    const tooltipEl = document.createElement('div');
-    tooltipEl.className = 'tooltip';
-    tooltipEl.addEventListener('mouseenter', () => {
-      clearTimer();
-      show();
-    });
-    tooltipEl.addEventListener('mouseleave', () => {
-      clearTimer();
-      if (shown) {
-        timer = setTimeout(hide, hideDelayMs);
-      }
-    });
-    const arrowEl = document.createElement('div');
-    arrowEl.className = 'arrow';
-    const contentEl = content.cloneNode(true);
-    tooltipEl.append(contentEl);
-    tooltipEl.append(arrowEl);
-    elements = {
-      arrow: arrowEl,
-      tooltip: tooltipEl,
-      video: null,
-      cancelAutoUpdate: autoUpdate(link, tooltipEl, updatePosition),
-    };
-    document.body.append(tooltipEl);
+    elements.tooltip.classList.add('show', 'hovered');
   }
   link.addEventListener('mouseenter', () => {
-    clearTimer();
-    if (!shown) {
-      timer = setTimeout(show, showDelayMs);
+    elements?.tooltip.classList.add('hovered');
+    if (elements && (elements.tooltip.computedStyleMap().get('opacity') as CSSUnitValue).value > 0.25) {
+      show();
+    }
+    else {
+      setTimer(show, showDelayMs);
     }
   });
   link.addEventListener('mouseleave', () => {
-    clearTimer();
-    if (shown) {
-      timer = setTimeout(hide, hideDelayMs);
-    }
+    elements?.tooltip.classList.remove('hovered');
+    setTimer(hide, hideDelayMs);
   });
 }
