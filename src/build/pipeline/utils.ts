@@ -21,7 +21,7 @@ export function emitFile(file: Str, name: Str = randomStaticName()): Str {
 }
 
 export function cleanDist(): void {
-  fs.rmSync(dirs.dist, { force: true, recursive: true });
+  fs.rmSync(dirs.dist, { force: true, recursive: true, maxRetries: 20, retryDelay: 100 });
   fs.mkdirSync(dirs.dist);
   fs.mkdirSync(dirs.distStatic);
 }
