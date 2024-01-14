@@ -53,13 +53,17 @@ function setupAutoplay(): void {
 }
 
 export function setupVideoLoading(video: HTMLVideoElement): void {
+  const parent = video.parentElement;
+  if (!parent || !parent.classList.contains('video-holder')) {
+    return;
+  }
   video.addEventListener('canplay', () => {
-    video.classList.add('can-play');
+    parent.classList.add('can-play');
   });
   if (video.readyState === HTMLMediaElement.HAVE_NOTHING) {
-    video.classList.remove('can-play');
+    parent.classList.remove('can-play');
   } else {
-    video.classList.add('can-play');
+    parent.classList.add('can-play');
   }
 }
 

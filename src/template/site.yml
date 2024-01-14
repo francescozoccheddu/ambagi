@@ -13,8 +13,7 @@ resources:
     bodyEmph: "Sanchez-Italic.woff2"
   icons:
     loading: "loading.svg"
-    videoPlay: "video-play.svg"
-    videoLoading: "video-loading.svg"
+    videoLoading: "loading.svg"
   scripts:
     main: "main.ts"
   styles:

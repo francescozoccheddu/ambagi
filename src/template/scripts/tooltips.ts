@@ -33,6 +33,7 @@ function setupTooltipContent(content: HTMLElement, hide: () => void): void {
     setupVideoLoading(video);
     Object.assign(video.style, {
       width: `${video.width}px`,
+      'aspect-ratio': `${video.width} / ${video.height}`,
     });
     if (!video.autoplay && (video.muted || canAutoPlayVideos())) {
       video.autoplay = true;
