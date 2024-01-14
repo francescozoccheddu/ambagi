@@ -107,9 +107,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
       keywords: pageConf.keywords ?? [],
     },
     body,
-    csp: buildCsp(dev ? [
-      { target: 'default-src', values: [cspValues.all] },
-    ] :
+    csp: buildCsp(
       [
         { target: 'default-src', values: [cspValues.none] },
         { target: 'script-src', values: [cspValues.self, cspValues.unsafeInline] },
@@ -117,6 +115,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
         { target: 'font-src', values: [cspValues.self] },
         { target: 'img-src', values: [cspValues.self] },
         { target: 'media-src', values: [cspValues.self] },
+        ...(dev ? [{ target: 'connect-src', values: [cspValues.all] }] : []),
       ]),
   });
   log('Build fonts');
