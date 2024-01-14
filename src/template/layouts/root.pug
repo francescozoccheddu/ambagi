@@ -63,7 +63,7 @@ mixin element(element)
 
 html(lang=siteConf.language)
   head
-    title #{siteConf.title}: #{pageConf.title}
+    title #{siteConf.title} #{pageConf.title}
     meta(name="description" content=pageConf.description || siteConf.description)
     meta(name="keywords" content=[...pageConf.keywords, ...siteConf.keywords].join(", "))
     meta(name="author" content=siteConf.author)
@@ -81,7 +81,6 @@ html(lang=siteConf.language)
     style #{res.styles.main.inline}
     noscript 
       style #{res.styles.noscript.inline}
-    // TODO: Remove
   body
     #loading
       #loading-content !{res.icons.loading.inline}

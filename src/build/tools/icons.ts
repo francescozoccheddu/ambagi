@@ -12,6 +12,7 @@ export function buildIcon(iconFile: Str): Str {
       name: 'preset-default',
       params: {
         overrides: {
+          removeViewBox: false,
         },
       },
     }],
