@@ -12,20 +12,52 @@ export function setupTooltips(): void {
 }
 
 const showDelayMs = 500;
-const hideDelayMs = 200;
+const hideDelayMs = 200000;
 const doubleClickMaxDelayMs = 200;
 const clickAfterShowMinDelayMs = 500;
 
 type TooltipInstance = Readonly<{
   tooltip: HTMLElement;
   arrow: HTMLElement;
-  video: HTMLVideoElement | null;
   cancelAutoUpdate(): void;
 }>
+
+function canAutoPlayVideos(): boolean {
+  if ('safari' in window) {
+    return navigator?.userActivation?.isActive ?? true;
+  }
+  return navigator?.userActivation?.hasBeenActive ?? true;
+}
+
+function setupTooltipContent(content: HTMLElement, hide: () => void): void {
+  const video = Array.from(content.children).find(child => child.tagName === 'VIDEO') as HTMLVideoElement | undefined;
+  if (video) {
+    if (!video.autoplay && (video.muted || canAutoPlayVideos())) {
+      video.autoplay = true;
+      video.controls = false;
+      video.playsInline = true;
+    }
+    video.loop = false;
+    if (canAutoPlayVideos()) {
+      void video.play();
+    }
+    video.addEventListener('timeupdate', () => {
+      if (video.currentTime > video.duration - 0.3 && !video.controls && !video.loop) {
+        hide();
+      }
+    });
+    video.addEventListener('click', () => {
+      if (video.paused && (video.loop || video.currentTime < video.duration - 0.3) && !video.controls) {
+        void video.play();
+      }
+    });
+  }
+}
 
 function setupTooltip(link: HTMLElement, content: HTMLElement): void {
   let timer: ReturnType<typeof setTimeout> | null = null;
   let lastClickTime: number = 0;
+  let finished: boolean = false;
   let lastFirstOpenTime: number = 0;
   let elements: TooltipInstance | null = null;
   function getOpacity(): number {
@@ -90,6 +122,7 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
   function show(): void {
     clearTimer();
     if (elements === null) {
+      finished = false;
       lastFirstOpenTime = performance.now();
       const ttEl = document.createElement('div');
       ttEl.className = 'tooltip';
@@ -114,19 +147,24 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
       });
       const ttArrowEl = document.createElement('div');
       ttArrowEl.className = 'tooltip-arrow';
-      const contentEl = content.cloneNode(true);
+      const contentEl = content.cloneNode(true) as HTMLElement;
       ttContentEl.append(contentEl);
       ttContentEl.append(ttArrowEl);
       ttEl.append(ttContentEl);
       elements = {
         arrow: ttArrowEl,
         tooltip: ttEl,
-        video: null,
         cancelAutoUpdate: autoUpdate(link, ttEl, updatePosition),
       };
       document.body.append(ttEl);
+      setupTooltipContent(contentEl, () => {
+        finished = true;
+        hide();
+      });
     }
-    elements.tooltip.classList.add('show', 'hovered');
+    if (!finished) {
+      elements.tooltip.classList.add('show', 'hovered');
+    }
   }
   link.addEventListener('mouseenter', () => {
     elements?.tooltip.classList.add('hovered');
