@@ -68,6 +68,7 @@ html(lang=siteConf.language)
     meta(name="keywords" content=[...pageConf.keywords, ...siteConf.keywords].join(", "))
     meta(name="author" content=siteConf.author)
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="Content-Security-Policy" content=csp)
     meta(name="robots" content=(siteConf.allowRobots && pageConf.allowRobots ? "nofollow, noarchive, nositelinkssearchbox, notranslate" : "none"))
     | !{faviconHtml}
     style

@@ -4,12 +4,14 @@ import { PageConf, SiteConfImageResolution } from 'ambagi/pipeline/conf';
 import { BuildPageConf, BuildPageResult, emitData, emitFile, log, mimeToSuffix, popLog, pushLog, randomStaticName } from 'ambagi/pipeline/utils';
 import { processBodyDef } from 'ambagi/tools/bodyDef';
 import { parseBodyXml } from 'ambagi/tools/bodyXml';
+import { buildCsp, cspValues } from 'ambagi/tools/csp';
 import { makeXmlLoader, makeYamlLoader, XmlLoader, YamlLoader } from 'ambagi/tools/data';
 import { buildFont } from 'ambagi/tools/fonts';
 import { buildImage } from 'ambagi/tools/images';
 import { makeLayoutBuilder } from 'ambagi/tools/layouts';
 import { extractVideoThumbnail, getVideoInfo } from 'ambagi/tools/videos';
 import { dirs } from 'ambagi/utils/dirs';
+import { dev } from 'ambagi/utils/env';
 import path from 'path';
 
 let pageConfLoader: YamlLoader<PageConf> | Nul = null;
@@ -105,6 +107,15 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
       keywords: pageConf.keywords ?? [],
     },
     body,
+    csp: buildCsp(dev ? [] :
+      [
+        { target: 'default-src', values: [cspValues.none] },
+        { target: 'script-src', values: [cspValues.self] },
+        { target: 'style-src', values: [cspValues.self, cspValues.unsafeInline] },
+        { target: 'font-src', values: [cspValues.self] },
+        { target: 'img-src', values: [cspValues.self] },
+        { target: 'media-src', values: [cspValues.self] },
+      ]),
   });
   log('Build fonts');
   for (const [key, text] of toArr(fontUsages)) {
