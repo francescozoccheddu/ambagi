@@ -28,7 +28,7 @@ function setVideoState(video: HTMLVideoElement, playing: boolean): void {
   updateVideoState(video);
 }
 
-export function setupVideos(): void {
+function setupAutoplay(): void {
   if (!window.IntersectionObserver) {
     return;
   }
@@ -50,4 +50,20 @@ export function setupVideos(): void {
       setVideoState(video, !document.hidden);
     }
   });
+}
+
+export function setupVideoLoading(video: HTMLVideoElement): void {
+  video.addEventListener('canplay', () => {
+    video.classList.add('can-play');
+  });
+  if (video.readyState === HTMLMediaElement.HAVE_NOTHING) {
+    video.classList.remove('can-play');
+  } else {
+    video.classList.add('can-play');
+  }
+}
+
+export function setupVideos(): void {
+  Array.from(document.getElementsByTagName('video')).forEach(setupVideoLoading);
+  setupAutoplay();
 }

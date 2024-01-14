@@ -1,4 +1,5 @@
 import { arrow, autoUpdate, computePosition, flip, hide as hideMw, limitShift, offset, shift } from '@floating-ui/dom';
+import { setupVideoLoading } from 'ambagi/videos';
 
 export function setupTooltips(): void {
   const links = Array.from(document.getElementsByClassName('footnote-link')) as HTMLElement[] as readonly HTMLElement[];
@@ -29,6 +30,7 @@ function canAutoPlayVideos(): boolean {
 function setupTooltipContent(content: HTMLElement, hide: () => void): void {
   const video = Array.from(content.children).find(child => child.tagName === 'VIDEO') as HTMLVideoElement | undefined;
   if (video) {
+    setupVideoLoading(video);
     if (!video.autoplay && (video.muted || canAutoPlayVideos())) {
       video.autoplay = true;
       video.controls = false;

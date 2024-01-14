@@ -107,10 +107,12 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
       keywords: pageConf.keywords ?? [],
     },
     body,
-    csp: buildCsp(dev ? [] :
+    csp: buildCsp(dev ? [
+      { target: 'default-src', values: [cspValues.all] },
+    ] :
       [
         { target: 'default-src', values: [cspValues.none] },
-        { target: 'script-src', values: [cspValues.self] },
+        { target: 'script-src', values: [cspValues.self, cspValues.unsafeInline] },
         { target: 'style-src', values: [cspValues.self, cspValues.unsafeInline] },
         { target: 'font-src', values: [cspValues.self] },
         { target: 'img-src', values: [cspValues.self] },
