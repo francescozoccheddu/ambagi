@@ -12,7 +12,7 @@ export function setupTooltips(): void {
 }
 
 const showDelayMs = 500;
-const hideDelayMs = 200000;
+const hideDelayMs = 200;
 const doubleClickMaxDelayMs = 200;
 const clickAfterShowMinDelayMs = 500;
 
