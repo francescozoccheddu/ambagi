@@ -36,7 +36,7 @@ mixin media(element)
   figure
     case element.kind
       when "video"
-        video(width=element.sources[0].width height=element.sources[0].height muted=(!element.manual || !element.sources[0].audio) controls=element.manual autoplay=!element.manual playsinline=!element.manual disablepictureinpicture loop=!element.manual poster=element.thumbnails[0].uri)
+        video(width=element.sources[0].width height=element.sources[0].height muted=(!element.manual || !element.sources[0].info.audio) controls=element.manual autoplay=!element.manual playsinline=!element.manual disablepictureinpicture loop=!element.manual poster=element.thumbnails[0].uri)
           each src in element.sources
             source(src=src.uri type=src.info.type)
         if element.caption

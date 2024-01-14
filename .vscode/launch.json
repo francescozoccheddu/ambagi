@@ -11,6 +11,9 @@
         "--tsconfig",
         "${workspaceRoot}/src/build/tsconfig.json",
       ],
+      "args": [
+        "build"
+      ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "skipFiles": [
