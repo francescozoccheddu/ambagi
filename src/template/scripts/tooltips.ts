@@ -23,9 +23,6 @@ type TooltipInstance = Readonly<{
 }>
 
 function canAutoPlayVideos(): boolean {
-  if ('safari' in window) {
-    return navigator?.userActivation?.isActive ?? true;
-  }
   return navigator?.userActivation?.hasBeenActive ?? true;
 }
 
@@ -39,7 +36,9 @@ function setupTooltipContent(content: HTMLElement, hide: () => void): void {
     }
     video.loop = false;
     if (canAutoPlayVideos()) {
-      void video.play();
+      void video.play().catch(() => {
+        video.controls = true;
+      });
     }
     video.addEventListener('timeupdate', () => {
       if (video.currentTime > video.duration - 0.3 && !video.controls && !video.loop) {
