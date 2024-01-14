@@ -28,7 +28,7 @@ function canAutoPlayVideos(): boolean {
 }
 
 function setupTooltipContent(content: HTMLElement, hide: () => void): void {
-  const video = Array.from(content.children).find(child => child.tagName === 'VIDEO') as HTMLVideoElement | undefined;
+  const video = content.getElementsByTagName('video')[0] ?? null;
   if (video) {
     setupVideoLoading(video);
     Object.assign(video.style, {
