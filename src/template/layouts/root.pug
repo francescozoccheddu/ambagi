@@ -24,28 +24,28 @@ mixin paragraph(paragraph)
       blockquote
         +run(paragraph.children)
 
-mixin img(sources, alt)
+mixin img(sources, alt, style)
   - function onerror(fallbacks) {
   -   if (fallbacks.length === 0) return "";
   -   return `this.onerror=function(){${onerror(fallbacks.slice(1))}};this.src='${fallbacks[0].uri}';this.width=${fallbacks[0].info.width};this.height=${fallbacks[0].info.height};`
   - }
-  img(src=sources[0].uri onerror=onerror(sources.slice(1)) alt=(alt || '') loading='lazy' width=sources[0].info.width height=sources[0].info.height)
+  img(src=sources[0].uri onerror=onerror(sources.slice(1)) alt=(alt || '') loading='lazy' width=sources[0].info.width height=sources[0].info.height, style=style)
 
 
-mixin media(element)
+mixin media(element, style)
   figure
     case element.kind
       when "video"
         .video-holder
           img.video-loading-icon(src=res.icons.videoLoading.url width=30 height=30 alt='')
-          video(width=element.sources[0].info.width height=element.sources[0].info.height muted=(!element.manual || !element.sources[0].info.audio) controls=element.manual autoplay=!element.manual playsinline=!element.manual disablepictureinpicture loop=!element.manual poster=element.thumbnails[0].uri)
+          video(width=element.sources[0].info.width height=element.sources[0].info.height muted=(!element.manual || !element.sources[0].info.audio) controls=element.manual autoplay=!element.manual playsinline=!element.manual disablepictureinpicture loop=!element.manual poster=element.thumbnails[0].uri style=style)
             each src in element.sources
               source(src=src.uri type=src.info.type)
         if element.caption
           figcaption 
             +run(element.caption)
       when "image"
-        +img(element.sources, element.alt)
+        +img(element.sources, element.alt, style)
         if element.caption
           figcaption 
             +run(element.caption)
@@ -56,11 +56,11 @@ mixin element(element)
     when "paragraph"
       +paragraph(element)
     when "mediaBox"
-      .inline(data-float=element.float data-offset=element.offset)
-        +media(element.child)
+      .inline(data-float=element.float)
+        +media(element.child, { 'object-position': `${element.offsetX*100}% ${element.offsetY*100}%` })
     when "video"
     when "image"
-      +media(element)
+      +media(element, {})
 
 
 html(lang=siteConf.language)

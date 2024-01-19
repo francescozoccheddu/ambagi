@@ -30,15 +30,8 @@
                       </xs:restriction>
                     </xs:simpleType>
                   </xs:attribute>
-                  <xs:attribute name="offset" use="optional" default="center">
-                    <xs:simpleType>
-                      <xs:restriction base="xs:string">
-                        <xs:enumeration value="left" />
-                        <xs:enumeration value="right" />
-                        <xs:enumeration value="center" />
-                      </xs:restriction>
-                    </xs:simpleType>
-                  </xs:attribute>
+                  <xs:attribute name="offsetX" use="optional" default="0.5" type="am:offset" />
+                  <xs:attribute name="offsetY" use="optional" default="0.5" type="am:offset" />
                 </xs:complexType>
               </xs:element>
             </xs:choice>
@@ -93,6 +86,13 @@
       <xs:element name="e" type="am:non-empty-string" />
     </xs:choice>
   </xs:complexType>
+
+  <xs:simpleType name="offset">
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0" />
+      <xs:maxInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
 
   <xs:complexType name="text" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">

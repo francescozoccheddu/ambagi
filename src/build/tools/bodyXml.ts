@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-named-as-default
 import { err } from '@francescozoccheddu/ts-goodies/errors';
 import { isUnd } from '@francescozoccheddu/ts-goodies/types';
-import { Body, BodyCredit, BodyElementKind, BodyFootnote, BodyFootnoteLink, BodyImage, BodyMediaBox, BodyMediaBoxOffset, BodyMediaSource, BodyMediaSourceInfo, BodyParagraph, BodyParagraphFormat, BodySpan, BodySpanFormat, BodyVideo } from 'ambagi/pipeline/body';
+import { Body, BodyCredit, BodyElementKind, BodyFootnote, BodyFootnoteLink, BodyImage, BodyMediaBox, BodyMediaSource, BodyMediaSourceInfo, BodyParagraph, BodyParagraphFormat, BodySpan, BodySpanFormat, BodyVideo } from 'ambagi/pipeline/body';
 import { Element as XmlElement } from 'xml-js';
 
 function toFloatOrNul(str: Str | Nul): Num | Nul {
@@ -83,7 +83,8 @@ function visitEl(el: XmlElement | Und): Unk {
             kind: BodyElementKind.mediaBox,
             child: visitEl(els[0]),
             float: attrs['float'],
-            offset: attrs['offset'] ?? BodyMediaBoxOffset.center,
+            offsetX: toFloatOrNul(attrs['offsetX']?.toString() ?? null) ?? 0.5,
+            offsetY: toFloatOrNul(attrs['offsetY']?.toString() ?? null) ?? 0.5,
           };
         case 'fn':
           return <BodyFootnoteLink>{

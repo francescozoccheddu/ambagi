@@ -67,16 +67,11 @@ export enum BodyMediaBoxFloat {
   right = 'right'
 }
 
-export enum BodyMediaBoxOffset {
-  left = 'left',
-  center = 'center',
-  right = 'right'
-}
-
 export type BodyMediaBox<TIsDef extends Bool = false> = R<{
   child: BodyMedia<TIsDef>;
   float: BodyMediaBoxFloat;
-  offset: BodyMediaBoxOffset;
+  offsetX: Num;
+  offsetY: Num;
 }> & Kind<BodyElementKind.mediaBox>
 
 type BodyMediaBase = R<{
