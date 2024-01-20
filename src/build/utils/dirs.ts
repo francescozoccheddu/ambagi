@@ -11,6 +11,7 @@ const build = path.join(src, 'build');
 const pages = path.join(root, 'ambagi-pages/pages');
 const template = path.join(src, 'template');
 const fonts = path.join(template, 'fonts');
+const copy = path.join(template, 'copy');
 const layouts = path.join(template, 'layouts');
 const scripts = path.join(template, 'scripts');
 const styles = path.join(template, 'styles');
@@ -20,5 +21,5 @@ const distStaticBaseName = 'static';
 const distStatic = path.join(dist, distStaticBaseName);
 
 export const dirs = {
-  root, dist, src, schemas, build, pages, template, fonts, layouts, scripts, styles, icons, favicon, distStatic, distStaticBaseName,
+  root, dist, src, schemas, build, pages, template, fonts, layouts, scripts, styles, icons, copy, favicon, distStatic, distStaticBaseName,
 } as const;

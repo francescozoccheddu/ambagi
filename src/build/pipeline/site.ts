@@ -2,7 +2,7 @@ import { toObj } from '@francescozoccheddu/ts-goodies/arrays';
 import { mapValues, toArr } from '@francescozoccheddu/ts-goodies/objects';
 import { SiteConf } from 'ambagi/pipeline/conf';
 import { buildPage } from 'ambagi/pipeline/page';
-import { BuildPageConf, cleanDist, emitData, log, PageResource, popLog, pushLog } from 'ambagi/pipeline/utils';
+import { BuildPageConf, cleanDist, emitCopy, emitData, log, PageResource, popLog, pushLog } from 'ambagi/pipeline/utils';
 import { makeYamlLoader, YamlLoader } from 'ambagi/tools/data';
 import { buildFavicon } from 'ambagi/tools/favicon';
 import { buildIcon } from 'ambagi/tools/icons';
@@ -63,5 +63,6 @@ export async function buildSite(): Promise<void> {
   log('Build metadata');
   emitData(buildRobotsTxt(joinUrl(siteConf.url, 'sitemap.txt'), robotsEntries), 'robots.txt');
   emitData(buildSitemapTxt(pageUrls), 'sitemap.txt');
+  emitCopy();
   log('Done');
 }
