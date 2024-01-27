@@ -29,7 +29,7 @@ mixin img(sources, alt, style)
   -   if (fallbacks.length === 0) return "";
   -   return `this.onerror=function(){${onerror(fallbacks.slice(1))}};this.src='${fallbacks[0].uri}';this.width=${fallbacks[0].info.width};this.height=${fallbacks[0].info.height};`
   - }
-  img(src=sources[0].uri onerror=onerror(sources.slice(1)) alt=(alt || '') loading='lazy' width=sources[0].info.width height=sources[0].info.height, style=style)
+  img(src=sources[0].uri onerror=onerror(sources.slice(1)) alt=(alt || '') width=sources[0].info.width height=sources[0].info.height, style=style)
 
 
 mixin media(element, style)
