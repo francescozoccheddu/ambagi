@@ -1,8 +1,9 @@
 import { toObj } from '@francescozoccheddu/ts-goodies/arrays';
 import { mapValues, toArr } from '@francescozoccheddu/ts-goodies/objects';
 import { SiteConf } from 'ambagi/pipeline/conf';
+import { buildHome } from 'ambagi/pipeline/home';
 import { buildPage } from 'ambagi/pipeline/page';
-import { BuildPageConf, cleanDist, emitCopy, emitData, log, PageResource, popLog, pushLog } from 'ambagi/pipeline/utils';
+import { BuildPageConf, BuildPageResult, cleanDist, emitCopy, emitData, log, PageResource, popLog, pushLog } from 'ambagi/pipeline/utils';
 import { makeYamlLoader, YamlLoader } from 'ambagi/tools/data';
 import { buildFavicon } from 'ambagi/tools/favicon';
 import { buildIcon } from 'ambagi/tools/icons';
@@ -49,17 +50,23 @@ export async function buildSite(): Promise<void> {
   };
   const pageDirents = fs.readdirSync(dirs.pages, { withFileTypes: true }).filter(dirent => dirent.isDirectory());
   const robotsEntries: Arr<RobotsEntry> = [
-    { path: '/', allow: siteConf.allowRobots ?? false },
     { path: `/${dirs.distStaticBaseName}`, allow: false },
   ];
   const pageUrls: Arr<Str> = [];
+  const pageResults: Arr<BuildPageResult> = [];
   for (const pageDirent of pageDirents) {
     pushLog(`Build page '${pageDirent.name}'`);
     const buildOut = await buildPage(path.join(pageDirent.path, pageDirent.name), buildPageConf);
+    pageResults.push(buildOut);
     pageUrls.push(buildOut.url);
     robotsEntries.push({ path: buildOut.url, allow: buildOut.allowRobots });
     popLog();
   }
+  pushLog('Build home');
+  await buildHome({ ...buildPageConf, pages: pageResults });
+  pageUrls.push('');
+  robotsEntries.push({ path: '/', allow: siteConf.allowRobots ?? false });
+  popLog();
   log('Build metadata');
   emitData(buildRobotsTxt(joinUrl(siteConf.url, 'sitemap.txt'), robotsEntries), 'robots.txt');
   emitData(buildSitemapTxt(pageUrls), 'sitemap.txt');

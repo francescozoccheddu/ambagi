@@ -1,5 +1,5 @@
 import { arrow, autoUpdate, computePosition, flip, hide as hideMw, limitShift, offset, shift } from '@floating-ui/dom';
-import { setupVideoLoading } from 'ambagi/videos';
+import { setupVideoLoading } from 'ambagi/components/videos';
 
 export function setupTooltips(): void {
   const links = Array.from(document.getElementsByClassName('footnote-link')) as HTMLElement[] as readonly HTMLElement[];

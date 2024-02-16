@@ -37,6 +37,24 @@ em
   text-align: left
   hyphens: auto
 
+#subtitle
+  font-family: fonts.$subhead
+  color: colors.$mut
+  font-size: 1.25rem
+  text-align: left
+  hyphens: auto
+
+#pages
+
+  .title, .bullet
+    font-family: fonts.$head
+    font-size: 1.5rem
+    color: colors.$key
+
+  .subtitle
+    font-family: fonts.$subhead
+    color: colors.$mut
+
 #body
   line-height: 1.65
   text-align: justify
@@ -92,6 +110,9 @@ a
 
   #title
     font-size: 2.25rem
+
+  #subtitle
+    font-size: 1.1rem
 
 @include breakpoints.xs
   html

@@ -74,14 +74,14 @@ html(lang=siteConf.language)
     meta(name="robots" content=(siteConf.allowRobots && pageConf.allowRobots ? "nofollow, noarchive, nositelinkssearchbox, notranslate" : "none"))
     | !{faviconHtml}
     style
-      each fontKey in ["logo", "head", "bodyNorm", "bodyEmph"]
+      each fontKey in ["logo", "head", "subhead", "bodyNorm", "bodyEmph"]
         - const font = res.fonts[fontKey]
         | @font-face {
         |   font-family: '#{fontKey}';
         |   src: #{['woff2', 'woff'].map(fmt => `url('${font[`${fmt}Url`]}') format('${fmt}')`).join(", ")};
         |   font-display: block;
         | }
-    style #{res.styles.main.inline}
+    style #{res.styles.page.inline}
     noscript 
       style #{res.styles.noscript.inline}
   body
@@ -89,12 +89,15 @@ html(lang=siteConf.language)
       #loading-content !{res.icons.loading.inline}
     main#main(role="main")
       header#header
-        h1#logo #{text("logo", siteConf.title.toLowerCase())}
+        a(href='/')
+          h1#logo #{text("logo", siteConf.title.toLowerCase())}
         h2#title #{text("head", pageConf.title)}
+        if pageConf.subtitle
+          h3#subtitle #{text("subhead", pageConf.subtitle)}
       article#body
         each el in body.main
           +element(el)
-      footer
+      footer#footer
         if body.footnotes.length > 0
           section#footnotes
             each fn, i in body.footnotes
@@ -111,7 +114,7 @@ html(lang=siteConf.language)
               .credit
                 +run(cr.children)
         section#author #{text("logo", siteConf.author)}
-  script(src=res.scripts.main.url)
+  script(src=res.scripts.page.url)
   if devScript !== null
     script
       | !{devScript}

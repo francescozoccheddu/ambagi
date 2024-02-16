@@ -80,7 +80,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
   }));
   const fontUsages = mapValues(buildConf.fonts, () => '');
   log('Build layout');
-  const html = await makeLayoutBuilder(path.join(dirs.layouts, 'root.pug'))({
+  const html = await makeLayoutBuilder(path.join(dirs.layouts, 'page.pug'))({
     res: {
       fonts: fontUrls,
       icons: buildConf.icons,
@@ -103,6 +103,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
     pageConf: {
       allowRobots: pageConf.allowRobots ?? false,
       title: pageConf.title,
+      subtitle: pageConf.subtitle ?? null,
       description: pageConf.description ?? null,
       keywords: pageConf.keywords ?? [],
     },
@@ -131,5 +132,7 @@ export async function buildPage(dir: Str, buildConf: BuildPageConf): Promise<Bui
   return {
     allowRobots: pageConf.allowRobots ?? false,
     url: pageConf.url,
+    title: pageConf.title,
+    subtitle: (pageConf.indexSubtitle === undefined ? pageConf.subtitle : pageConf.indexSubtitle) ?? null,
   };
 }

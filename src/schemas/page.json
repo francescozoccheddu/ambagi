@@ -14,7 +14,12 @@
     "url": {
       "type": "string",
       "description": "The page url segment",
-      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "not": {
+        "enum": [
+          "index"
+        ]
+      }
     },
     "title": {
       "$ref": "#/$defs/text",
@@ -29,7 +34,31 @@
           "type": "null"
         }
       ],
-      "description": "The optional page decription (without the site description)",
+      "description": "The optional page description (without the site description)",
+      "default": null
+    },
+    "subtitle": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The optional page subtitle",
+      "default": null
+    },
+    "indexSubtitle": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The optional page subtitle to show in the index",
       "default": null
     },
     "keywords": {

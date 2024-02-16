@@ -54,6 +54,8 @@ export function mimeToSuffix(mimeType: Str): Str {
 export type BuildPageResult = R<{
   url: Str;
   allowRobots: Bool;
+  title: Str;
+  subtitle: Str | Nul;
 }>
 
 export type BuildPageConf = R<{
@@ -63,6 +65,10 @@ export type BuildPageConf = R<{
   styles: RStrObj<PageResource>;
   fonts: RStrObj<Buffer>;
   faviconHtml: Str;
+}>
+
+export type BuildHomeConf = BuildPageConf & R<{
+  pages: RArr<BuildPageResult>;
 }>
 
 export class PageResource {

@@ -1,0 +1,46 @@
+doctype html
+html(lang=siteConf.language)
+  head
+    title #{siteConf.title}
+    meta(name="description" content=siteConf.description)
+    meta(name="keywords" content=siteConf.keywords.join(", "))
+    meta(name="author" content=siteConf.author)
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="Content-Security-Policy" content=csp)
+    meta(name="robots" content=(siteConf.allowRobots ? "nofollow, noarchive, nositelinkssearchbox, notranslate" : "none"))
+    | !{faviconHtml}
+    style
+      each fontKey in ["logo", "head", "subhead", "bodyNorm", "bodyEmph"]
+        - const font = res.fonts[fontKey]
+        | @font-face {
+        |   font-family: '#{fontKey}';
+        |   src: #{['woff2', 'woff'].map(fmt => `url('${font[`${fmt}Url`]}') format('${fmt}')`).join(", ")};
+        |   font-display: block;
+        | }
+    style #{res.styles.home.inline}
+    noscript 
+      style #{res.styles.noscript.inline}
+  body
+    #loading
+      #loading-content !{res.icons.loading.inline}
+    main#main(role="main")
+      header#header
+        a(href='/')
+          h1#logo #{text("logo", siteConf.title.toLowerCase())}
+      nav#pages
+        ul
+          each page in pages
+            li.page
+              a(href=page.url)
+                .bullet #{text("head", "-")}
+                .text
+                  .title #{text("head", page.title)}
+                  if page.subtitle
+                    .subtitle #{text("subhead", page.subtitle)}
+
+      footer#footer
+        section#author #{text("logo", siteConf.author)}
+  script(src=res.scripts.home.url)
+  if devScript !== null
+    script
+      | !{devScript}

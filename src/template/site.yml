@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=../schemas/site.json
-url: "https://ambagi.surge.sh"
+url: "https://ambagi.pages.dev"
 title: "Ambagi"
 description: "Ambagi senza pretese"
 author: "F."
@@ -9,14 +9,17 @@ resources:
   fonts:
     logo: "Tangerine-Bold.woff2"
     head: "Afacad-Bold.woff2"
+    subhead: "Afacad-SemiBoldItalic.woff2"
     bodyNorm: "Sanchez-Regular.woff2"
     bodyEmph: "Sanchez-Italic.woff2"
   icons:
     loading: "loading.svg"
     videoLoading: "loading.svg"
   scripts:
-    main: "main.ts"
+    page: "page.ts"
+    home: "home.ts"
   styles:
-    main: "main.sass"
+    page: "page.sass"
+    home: "home.sass"
     noscript: "noscript.sass"
   favicon: "favicon.svg"

@@ -10,5 +10,5 @@ export function buildRobotsTxt(sitemapUrl: Str, entries: RArr<RobotsEntry>): Str
 }
 
 export function buildSitemapTxt(pageUrls: RArr<Str>): Str {
-  return pageUrls.join('\n');
+  return pageUrls.map(url => path.posix.join('/', url)).join('\n');
 }
