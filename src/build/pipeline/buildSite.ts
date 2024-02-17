@@ -43,7 +43,7 @@ export async function buildSite(): Promise<void> {
     pushLog(`Build body of page '${dirname}'`);
     log('Load config');
     const dir = path.join(pageDirent.path, dirname);
-    const result = await buildPageBody({ dir, siteConf, textLocal: fontUsageCollector.textLocal });
+    const result = await buildPageBody({ dir, siteConf, resources, textLocal: fontUsageCollector.textLocal });
     const conf = pageConfLoader!(path.join(dir, 'page.yml'));
     const bodyUrl = emitData(result.html, randomStaticName('.html'));
     popLog();
@@ -76,7 +76,7 @@ export async function buildSite(): Promise<void> {
       textLocal: fontUsageCollector.textLocal,
       csp,
     });
-    emitData(result.html, path.join(dirs.dist, `${page.conf.url}.html`));
+    emitData(result.html, `${page.conf.url}.html`);
   }
   pushLog('Build index page');
   const indexResult = await buildPage({
@@ -86,7 +86,7 @@ export async function buildSite(): Promise<void> {
     textLocal: fontUsageCollector.textLocal,
     csp,
   });
-  emitData(indexResult.html, path.join(dirs.dist, 'index.html'));
+  emitData(indexResult.html, 'index.html');
   popLog();
   log('Build fonts');
   for (const [key, text] of toArr(fontUsageCollector.usage)) {

@@ -6,7 +6,7 @@ import pug from 'pug';
 export type LayoutBuilder<TLocals extends StrObj> = (locals: TLocals) => Promise<Str>;
 
 export function makeLayoutBuilder<TLocals extends StrObj>(templateFile: Str): LayoutBuilder<TLocals> {
-  const template = pug.compileFile(templateFile);
+  const template = pug.compileFile(templateFile, { doctype: 'html' });
   return async (locs: TLocals) => {
     const devScript = dev ? getClientScript() : null;
     const html = template({ ...locs, devScript });

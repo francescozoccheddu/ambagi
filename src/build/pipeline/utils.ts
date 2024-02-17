@@ -27,7 +27,9 @@ export function cleanDist(): void {
 }
 
 export function emitCopy(): void {
-  fs.cpSync(dirs.copy, dirs.dist, { recursive: true, force: true });
+  if (fs.existsSync(dirs.copy)) {
+    fs.cpSync(dirs.copy, dirs.dist, { recursive: true, force: true });
+  }
 }
 
 export function mimeToExt(mimeType: Str): Str | Nul {

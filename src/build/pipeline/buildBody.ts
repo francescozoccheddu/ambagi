@@ -1,4 +1,5 @@
 import { Body, BodyImageSource } from 'ambagi/pipeline/body';
+import { BuildResourcesResult } from 'ambagi/pipeline/buildResources';
 import { SiteConf, SiteConfImageResolution } from 'ambagi/pipeline/conf';
 import { emitData, emitFile, log, mimeToSuffix, popLog, pushLog, randomStaticName, TextLocal } from 'ambagi/pipeline/utils';
 import { processBodyDef } from 'ambagi/tools/bodyDef';
@@ -12,6 +13,7 @@ import path from 'path';
 
 type LayoutLocals = R<{
   text: TextLocal;
+  res: BuildResourcesResult;
   body: Body;
 }>
 
@@ -31,6 +33,7 @@ async function processImageSourceDef(imageFileOrData: Str | Buffer, maxSize: Sit
 
 export type BuildPageBodyConf = R<{
   textLocal: TextLocal;
+  resources: BuildResourcesResult;
   siteConf: SiteConf;
   dir: Str;
 }>
@@ -82,6 +85,7 @@ export async function buildPageBody(buildConf: BuildPageBodyConf): Promise<Build
   log('Build layout');
   const html = await layoutBuilder({
     text: buildConf.textLocal,
+    res: buildConf.resources,
     body,
   });
   log('Done');
