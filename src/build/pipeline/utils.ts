@@ -1,6 +1,6 @@
+import { toObj } from '@francescozoccheddu/ts-goodies/arrays';
 import { prDebug } from '@francescozoccheddu/ts-goodies/logs';
-import { isStr } from '@francescozoccheddu/ts-goodies/types';
-import { SiteConf } from 'ambagi/pipeline/conf';
+import { toArr } from '@francescozoccheddu/ts-goodies/objects';
 import { dirs } from 'ambagi/utils/dirs';
 import fs from 'fs';
 import { nanoid } from 'nanoid';
@@ -51,52 +51,26 @@ export function mimeToSuffix(mimeType: Str): Str {
   return ext ? `.${ext}` : '';
 }
 
-export type BuildPageResult = R<{
-  url: Str;
-  allowRobots: Bool;
-  title: Str;
-  subtitle: Str | Nul;
+export async function mapValuesAsync<TV>(obj: RStrObj<Str>, map: (file: Str) => Promise<TV>): Promise<RStrObj<TV>> {
+  return toObj(await Promise.all(toArr(obj).map(async ([k, v]) => [k, await (map(v))])));
+}
+
+export type TextLocal = (font: Str, text: Str) => Str;
+
+export type FontUsageCollector = R<{
+  textLocal: TextLocal;
+  usage: RStrObj<Str>;
 }>
 
-export type BuildPageConf = R<{
-  siteConf: SiteConf;
-  icons: RStrObj<PageResource>;
-  scripts: RStrObj<PageResource>;
-  styles: RStrObj<PageResource>;
-  fonts: RStrObj<Buffer>;
-  faviconHtml: Str;
-}>
-
-export type BuildHomeConf = BuildPageConf & R<{
-  pages: RArr<BuildPageResult>;
-}>
-
-export class PageResource {
-
-  private readonly _data: Str | Buffer;
-  readonly mimeType: Str;
-  private _inlineData: Str | Nul;
-  private _url: Str | Nul;
-
-  constructor(data: Str | Buffer, mimeType: Str) {
-    this._data = data;
-    this.mimeType = mimeType;
-    this._inlineData = null;
-    this._url = null;
-  }
-
-  get url(): Str {
-    const suffix = mimeToSuffix(this.mimeType);
-    return this._url ??= emitData(this._data, randomStaticName(suffix));
-  }
-
-  get inline(): Str {
-    return this._inlineData
-      ??= isStr(this._data)
-        ? this._data
-        : `data:${this.mimeType};base64,${this._data.toString('base64')}`;
-  }
-
+export function makeFontUsageCollector(fonts: RArr<Str>): FontUsageCollector {
+  const usage = toObj(fonts.map(font => [font, ''] as const));
+  return {
+    usage,
+    textLocal: (font: Str, text: Str): Str => {
+      usage[font] += text;
+      return text;
+    },
+  };
 }
 
 let logOpLevel: Num = 0;

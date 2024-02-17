@@ -2,6 +2,8 @@ export type PageConf = R<{
   url: Str;
   title: Str;
   keywords?: RArr<Str>;
+  date?: Str | Nul;
+  priority?: Num | Nul;
   description?: Str | Nul;
   subtitle?: Str | Nul;
   indexSubtitle?: Str | Nul;

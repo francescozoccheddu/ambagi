@@ -1,6 +1,6 @@
 import { Server as ReloadServer } from '@francescozoccheddu/reload-please';
 import { prDone, prExc } from '@francescozoccheddu/ts-goodies/logs';
-import { buildSite } from 'ambagi/pipeline/site';
+import { buildSite } from 'ambagi/pipeline/buildSite';
 import { popLog, pushLog } from 'ambagi/pipeline/utils';
 import { dirs } from 'ambagi/utils/dirs';
 import { dev, setEnvironment } from 'ambagi/utils/env';

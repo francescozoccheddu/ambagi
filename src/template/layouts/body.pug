@@ -1,0 +1,120 @@
+doctype html
+
+mixin run(children)
+  each ch in children
+    case ch.kind
+      when "span"
+        case ch.format
+          when "normal"
+            span #{text("bodyNorm", ch.text)}
+          when "emphasized"
+            em #{text("bodyEmph", ch.text)}
+      when "footnoteLink"
+        - const i = body.footnotes.findIndex(fn => fn.key === ch.key)
+        - const idx = i + 1
+        a.footnote-link(tabIndex=-1 id=`fnl-${idx}` href=`#fn-${idx}` data-index=i)
+          sup #{text("bodyNorm", idx)}
+
+mixin paragraph(paragraph)
+  case paragraph.format
+    when "normal"
+      p
+        +run(paragraph.children)
+    when "quote"
+      blockquote
+        +run(paragraph.children)
+
+mixin img(sources, alt, style)
+  - function onerror(fallbacks) {
+  -   if (fallbacks.length === 0) return "";
+  -   return `this.onerror=function(){${onerror(fallbacks.slice(1))}};this.src='${fallbacks[0].uri}';this.width=${fallbacks[0].info.width};this.height=${fallbacks[0].info.height};`
+  - }
+  img(src=sources[0].uri onerror=onerror(sources.slice(1)) alt=(alt || '') width=sources[0].info.width height=sources[0].info.height, style=style)
+
+
+mixin media(element, style)
+  figure
+    case element.kind
+      when "video"
+        .video-holder
+          img.video-loading-icon(src=res.icons.videoLoading.url width=30 height=30 alt='')
+          video(width=element.sources[0].info.width height=element.sources[0].info.height muted=(!element.manual || !element.sources[0].info.audio) controls=element.manual autoplay=!element.manual playsinline=!element.manual disablepictureinpicture loop=!element.manual poster=element.thumbnails[0].uri style=style)
+            each src in element.sources
+              source(src=src.uri type=src.info.type)
+        if element.caption
+          figcaption 
+            +run(element.caption)
+      when "image"
+        +img(element.sources, element.alt, style)
+        if element.caption
+          figcaption 
+            +run(element.caption)
+
+
+mixin element(element)
+  case element.kind
+    when "paragraph"
+      +paragraph(element)
+    when "mediaBox"
+      .inline(data-float=element.float)
+        +media(element.child, { 'object-position': `${element.offsetX*100}% ${element.offsetY*100}%` })
+    when "video"
+    when "image"
+      +media(element, {})
+
+
+html(lang=siteConf.language)
+  head
+    title #{siteConf.title} #{pageConf.title}
+    meta(name="description" content=pageConf.description || siteConf.description)
+    meta(name="keywords" content=[...pageConf.keywords, ...siteConf.keywords].join(", "))
+    meta(name="author" content=siteConf.author)
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="Content-Security-Policy" content=csp)
+    meta(name="robots" content=(siteConf.allowRobots && pageConf.allowRobots ? "nofollow, noarchive, nositelinkssearchbox, notranslate" : "none"))
+    | !{faviconHtml}
+    style
+      each fontKey in ["logo", "head", "subhead", "bodyNorm", "bodyEmph"]
+        - const font = res.fonts[fontKey]
+        | @font-face {
+        |   font-family: '#{fontKey}';
+        |   src: #{['woff2', 'woff'].map(fmt => `url('${font[`${fmt}Url`]}') format('${fmt}')`).join(", ")};
+        |   font-display: block;
+        | }
+    style #{res.styles.page.inline}
+    noscript 
+      style #{res.styles.noscript.inline}
+  body
+    #loading
+      #loading-content !{res.icons.loading.inline}
+    main#main(role="main")
+      header#header
+        a(href='/')
+          h1#logo #{text("logo", siteConf.title.toLowerCase())}
+        h2#title #{text("head", pageConf.title)}
+        if pageConf.subtitle
+          h3#subtitle #{text("subhead", pageConf.subtitle)}
+      article#body
+        each el in body.main
+          +element(el)
+      footer#footer
+        if body.footnotes.length > 0
+          section#footnotes
+            each fn, i in body.footnotes
+              - const idx = i + 1
+              .footnote(data-index=idx id=`fn-${idx}` role="note")
+                .footnote-head
+                  a.footnote-rlink(tabindex=-1 href=`#fnl-${idx}`)
+                    sup #{idx}
+                .footnote-body
+                  +element(fn.child)
+        if body.credits.length > 0
+          section#credits(role="doc-credits")
+            each cr in body.credits
+              .credit
+                +run(cr.children)
+        section#author #{text("logo", siteConf.author)}
+  script(src=res.scripts.page.url)
+  if devScript !== null
+    script
+      | !{devScript}

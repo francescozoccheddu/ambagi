@@ -16,10 +16,8 @@ resources:
     loading: "loading.svg"
     videoLoading: "loading.svg"
   scripts:
-    page: "page.ts"
-    home: "home.ts"
+    main: "main.ts"
   styles:
-    page: "page.sass"
-    home: "home.sass"
+    main: "main.sass"
     noscript: "noscript.sass"
   favicon: "favicon.svg"
