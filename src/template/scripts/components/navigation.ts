@@ -68,14 +68,18 @@ function scrollToElement(element: HTMLElement): void {
     element.scrollIntoView({ behavior: 'smooth' });
   }
 }
+const requestCache: Record<string, Promise<string>> = {};
+
+async function fetchCached(url: string): Promise<string> {
+  return requestCache[url] ?? (requestCache[url] = fetch(url).then(res => res.text()));
+}
 
 async function retrieve(page: Page): Promise<boolean> {
   if (getUrl() === page.conf.url) {
     if (page.elements.bodyHolder.children.length > 0) {
       return true;
     }
-    const res = await fetch(page.conf.bodyUrl);
-    const html = await res.text();
+    const html = await fetchCached(page.conf.bodyUrl);
     if (getUrl() === page.conf.url) {
       page.elements.bodyHolder.innerHTML = html;
       setupVideos(page.elements.bodyHolder);
