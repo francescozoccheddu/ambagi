@@ -10,7 +10,7 @@ function onFontsReady(): void {
 }
 
 function setup(): void {
-  setTimeout(onFontsReady, 1000);
+  setTimeout(onFontsReady, 3000);
   try {
     void document.fonts.ready.then(onFontsReady);
   } catch { /* empty */ }
