@@ -1,7 +1,7 @@
 @use '../base/breakpoints'
 @use '../base/colors'
 
-$nav-duration: 0.5s
+$nav-duration: 0.25s
 
 html, body
   scroll-behavior: smooth
@@ -11,6 +11,7 @@ html, body
   width: 100%
 
 body
+  pointer-events: none
   overflow-x: hidden
   overflow-y: scroll
   scrollbar-gutter: stable both-edges
@@ -46,7 +47,7 @@ body
     #pages
       flex: 1 0 auto
       margin-block: 3rem 10rem
-      transition: margin $nav-duration ease
+      transition: margin $nav-duration ease-out
 
       ul
         list-style: none
@@ -56,7 +57,7 @@ body
         .page
           padding: 0rem
           margin-block: 1.5rem
-          transition: margin $nav-duration ease
+          transition: margin $nav-duration ease-out, opacity $nav-duration ease-out
 
           .header
             display: inline-block
@@ -70,12 +71,12 @@ body
                 height: 0.24rem
                 margin-inline: 1rem
                 background-color: colors.$key
-                transition: width $nav-duration ease, margin $nav-duration ease, opacity $nav-duration ease
+                transition: width $nav-duration ease-out, margin $nav-duration ease-out, opacity $nav-duration ease-out
 
               .text
 
                 .title, .subtitle, .date
-                  transition: font-size $nav-duration ease, margin $nav-duration ease
+                  transition: font-size $nav-duration ease-out, margin $nav-duration ease-out
 
                 .title
                   margin-block: 0.1rem
@@ -86,8 +87,19 @@ body
                 .date
                   margin-block: 0.15rem
 
+              &:hover
+
+                .bullet
+                  width: 0.75rem
+
+              &:active
+
+                .bullet
+                  width: 0.5rem
+
           .body-holder
-            overflow: hidden
+            opacity: 0
+            transition: opacity $nav-duration ease-out
 
           &.expanded
             margin-top: 0rem
@@ -112,6 +124,9 @@ body
 
                   .date
                     margin-block: 0.2rem
+
+            .body-holder
+              opacity: 1
 
       &.expanded
         margin-block: 0rem 2rem

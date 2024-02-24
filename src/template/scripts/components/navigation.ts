@@ -59,6 +59,29 @@ function getUrl(): string {
   return segments[segments.length - 1] ?? rootUrl;
 }
 
+function scrollToElement(element: HTMLElement): void {
+  const { top, bottom } = element.getBoundingClientRect();
+  const { innerHeight } = window;
+  if (bottom < 0 || top > innerHeight) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+async function retrieve(page: Page): Promise<boolean> {
+  if (getUrl() === page.conf.url) {
+    if (page.elements.bodyHolder.children.length > 0) {
+      return true;
+    }
+    const res = await fetch(page.conf.bodyUrl);
+    const html = await res.text();
+    if (getUrl() === page.conf.url) {
+      page.elements.bodyHolder.innerHTML = html;
+      return true;
+    }
+  }
+  return false;
+}
+
 export function setupNavigation(): void {
   const pagesEl = document.getElementById('pages')!;
   const logoEl = document.getElementById('logo')!;
@@ -69,9 +92,12 @@ export function setupNavigation(): void {
     const hasSomeExpanded = pagesEl.classList.contains('expanded');
     const expanded = root.classList.contains('expanded');
     const rootExpander = new Expander(root, !hasSomeExpanded || expanded);
-    rootExpander.duration = 0.25;
+    rootExpander.speed = 10;
     const bodyHolderExpander = new Expander(bodyHolder, expanded);
-    bodyHolderExpander.duration = 5;
+    bodyHolderExpander.speed = 10;
+    bodyHolderExpander.onHidden = (): void => {
+      bodyHolder.innerHTML = '';
+    };
     return {
       root,
       rootExpander,
@@ -86,7 +112,6 @@ export function setupNavigation(): void {
   function reset(): void {
     pagesEl.classList.remove('expanded');
     pageEls.forEach(p => {
-      p.bodyHolder.innerHTML = '';
       p.bodyHolderExpander.isExpanded = false;
       p.root.classList.remove('expanded');
       p.rootExpander.isExpanded = true;
@@ -99,19 +124,18 @@ export function setupNavigation(): void {
     if (!page?.elements.root.classList.contains('expanded')) {
       reset();
       if (page) {
-        void fetch(page.conf.bodyUrl).then(res => {
-          void res.text().then(html => {
-            if (getUrl() === url) {
-              pageEls.forEach(p => {
-                p.rootExpander.isExpanded = false;
-              });
-              pagesEl.classList.add('expanded');
-              page.elements.root.classList.add('expanded');
-              page.elements.bodyHolder.innerHTML = html;
-              page.elements.bodyHolderExpander.isExpanded = true;
-              setMeta(siteConf, page.conf);
-            }
-          });
+        void retrieve(page).then(done => {
+          if (done) {
+            pageEls.forEach(p => {
+              p.rootExpander.isExpanded = false;
+            });
+            pagesEl.classList.add('expanded');
+            page.elements.root.classList.add('expanded');
+            page.elements.rootExpander.isExpanded = true;
+            page.elements.bodyHolderExpander.isExpanded = true;
+            setMeta(siteConf, page.conf);
+            scrollToElement(logoEl);
+          }
         });
       }
     }
