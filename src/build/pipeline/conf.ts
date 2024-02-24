@@ -6,7 +6,6 @@ export type PageConf = R<{
   priority?: Num;
   description?: Str | Nul;
   subtitle?: Str | Nul;
-  allowRobots?: Bool;
 }>
 
 export type SiteResourcesConf = R<{

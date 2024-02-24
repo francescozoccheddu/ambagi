@@ -75,11 +75,6 @@
         "description": "A keyword"
       },
       "default": []
-    },
-    "allowRobots": {
-      "type": "boolean",
-      "description": "Allow robots to index the page (if the site allows it too)",
-      "default": false
     }
   },
   "additionalProperties": false,

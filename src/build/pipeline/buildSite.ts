@@ -9,7 +9,7 @@ import { cleanDist, emitCopy, emitData, log, makeFontUsageCollector, popLog, pus
 import { buildCsp, cspValues } from 'ambagi/tools/csp';
 import { makeYamlLoader, YamlLoader } from 'ambagi/tools/data';
 import { buildFont } from 'ambagi/tools/fonts';
-import { buildRobotsTxt, buildSitemapTxt, RobotsEntry } from 'ambagi/tools/robots';
+import { buildRobotsTxt, buildSitemapTxt } from 'ambagi/tools/robots';
 import { dirs } from 'ambagi/utils/dirs';
 import { dev } from 'ambagi/utils/env';
 import { joinUrl } from 'ambagi/utils/urls';
@@ -101,10 +101,12 @@ export async function buildSite(): Promise<void> {
     emitData(fonts.woff2, urls.woff2Url);
   }
   log('Build metadata');
-  const robotsEntries: RArr<RobotsEntry> = pages
-    .flatMap(p => [p.conf.url, `${p.conf.url}.html`].map(url => ({ path: url, allow: (p.conf.allowRobots ?? false) && (siteConf.allowRobots ?? false) })))
-    .concat(['/', 'index', 'index.html'].map(url => ({ path: url, allow: siteConf.allowRobots ?? false })));
-  emitData(buildRobotsTxt(joinUrl(siteConf.url, 'sitemap.txt'), robotsEntries), 'robots.txt');
+  emitData(buildRobotsTxt(
+    joinUrl(siteConf.url, 'sitemap.txt'),
+    [
+      { path: '/', allow: siteConf.allowRobots ?? false },
+      { path: dirs.distStaticBaseName, allow: false },
+    ]), 'robots.txt');
   const pageUrls: RArr<Str> = pages
     .map(p => p.conf.url)
     .concat([''])

@@ -54,7 +54,6 @@ export async function buildPage(buildConf: BuildPageConf): Promise<BuildPageResu
     pageConf: pageConf ?? {
       title: undefined,
       url: undefined,
-      allowRobots: undefined,
       date: undefined,
       description: undefined,
       keywords: undefined,
