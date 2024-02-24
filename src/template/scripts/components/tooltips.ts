@@ -60,6 +60,7 @@ function setupTooltipContent(content: HTMLElement, hide: () => void): void {
 }
 
 function setupTooltip(link: HTMLElement, content: HTMLElement, root: HTMLElement): void {
+  const body = root.getElementsByClassName('body')[0]!;
   let timer: ReturnType<typeof setTimeout> | null = null;
   let lastClickTime: number = 0;
   let finished: boolean = false;
@@ -161,7 +162,7 @@ function setupTooltip(link: HTMLElement, content: HTMLElement, root: HTMLElement
         tooltip: ttEl,
         cancelAutoUpdate: autoUpdate(link, ttEl, updatePosition),
       };
-      root.append(ttEl);
+      body.append(ttEl);
       setupTooltipContent(contentEl, () => {
         finished = true;
         hide();

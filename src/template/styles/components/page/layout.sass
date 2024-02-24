@@ -114,6 +114,7 @@ body
 
               .link
                 pointer-events: none
+                opacity: 1
 
                 .bullet
                   width: 0rem
@@ -148,7 +149,13 @@ body
 
     #footer
       flex: 0 0 auto
-      margin-block: 4rem 5rem
+      margin-block: 3rem 9rem
+
+      @include breakpoints.sm
+        margin-bottom: 7rem
+
+      @include breakpoints.xs
+        margin-bottom: 6rem
 
     @include breakpoints.lg
       width: 920px

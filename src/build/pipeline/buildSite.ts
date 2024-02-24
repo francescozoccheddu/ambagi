@@ -66,8 +66,7 @@ export async function buildSite(): Promise<void> {
       { target: 'font-src', values: [cspValues.self] },
       { target: 'img-src', values: [cspValues.self] },
       { target: 'media-src', values: [cspValues.self] },
-      { target: 'connect-src', values: [cspValues.self] },
-      ...(dev ? [{ target: 'connect-src', values: [cspValues.all] }] : []),
+      { target: 'connect-src', values: [dev ? cspValues.all : cspValues.self] },
     ]);
   for (const page of pages) {
     pushLog(`Build page '${page.dirname}'`);

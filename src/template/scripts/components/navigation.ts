@@ -1,4 +1,6 @@
 import { Expander } from 'ambagi/components/expander';
+import { setupTooltips } from 'ambagi/components/tooltips';
+import { setupVideos } from 'ambagi/components/videos';
 
 type PageElements = Readonly<{
   root: HTMLElement;
@@ -76,6 +78,8 @@ async function retrieve(page: Page): Promise<boolean> {
     const html = await res.text();
     if (getUrl() === page.conf.url) {
       page.elements.bodyHolder.innerHTML = html;
+      setupVideos(page.elements.bodyHolder);
+      setupTooltips(page.elements.bodyHolder);
       return true;
     }
   }

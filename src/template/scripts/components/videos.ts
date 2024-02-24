@@ -1,6 +1,8 @@
 const videoPendingDataKey = 'playPending';
 const videoShouldPlayDataKey = 'shouldPlay';
 
+let intersectionObserver: IntersectionObserver | null = null;
+
 function updateVideoState(video: HTMLVideoElement): void {
   const isPending = video.dataset[videoPendingDataKey] === true.toString();
   if (isPending) {
@@ -28,28 +30,24 @@ function setVideoState(video: HTMLVideoElement, playing: boolean): void {
   updateVideoState(video);
 }
 
-function setupAutoplay(): void {
+function setupAutoplay(root: HTMLElement): void {
   if (!window.IntersectionObserver) {
     return;
   }
-  const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('#main video[autoplay]')) as readonly HTMLVideoElement[];
-  const observer = new IntersectionObserver(function (entries) {
+  const videos = Array.from(root.querySelectorAll<HTMLVideoElement>('video[autoplay]')) as readonly HTMLVideoElement[];
+  intersectionObserver ??= new IntersectionObserver(function (entries) {
     entries.forEach((entry) => {
       const video = entry.target as HTMLVideoElement;
       setVideoState(video, entry.isIntersecting);
     });
   });
+  intersectionObserver.disconnect();
   for (const video of videos) {
     video.dataset[videoPendingDataKey] = false.toString();
     video.dataset[videoShouldPlayDataKey] = false.toString();
     setVideoState(video, false);
-    observer.observe(video);
+    intersectionObserver.observe(video);
   }
-  document.addEventListener('visibilitychange', () => {
-    for (const video of videos) {
-      setVideoState(video, !document.hidden);
-    }
-  });
 }
 
 export function setupVideoLoading(video: HTMLVideoElement): void {
@@ -67,7 +65,7 @@ export function setupVideoLoading(video: HTMLVideoElement): void {
   }
 }
 
-export function setupVideos(): void {
-  Array.from(document.getElementsByTagName('video')).forEach(setupVideoLoading);
-  setupAutoplay();
+export function setupVideos(root: HTMLElement): void {
+  Array.from(root.getElementsByTagName('video')).forEach(setupVideoLoading);
+  setupAutoplay(root);
 }
