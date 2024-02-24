@@ -3,6 +3,9 @@
 
 $nav-duration: 0.25s
 
+*
+  box-sizing: border-box
+
 html, body
   scroll-behavior: smooth
   padding: 0rem
@@ -30,19 +33,19 @@ body
 
     #header
       flex: 0 0 auto
-      margin-block: 4rem 0rem
+      margin-top: 4rem
 
       #logo
         margin-bottom: -0.25rem
 
       @include breakpoints.md
-        margin-block: 4rem 4rem
+        margin-top: 4rem
 
       @include breakpoints.sm
-        margin-block: 3rem 3.5rem
+        margin-top: 3rem
 
       @include breakpoints.xs
-        margin-block: 2rem 3rem
+        margin-top: 1.75rem
 
     #pages
       flex: 1 0 auto
@@ -66,14 +69,15 @@ body
 
             .link
               display: flex
-              align-items: baseline
+              align-items: flex-start
 
               .bullet
+                margin-top: 0.92rem
                 width: 0.9rem
                 height: 0.24rem
                 margin-inline: 1rem
                 background-color: colors.$key
-                transition: width $nav-duration ease-out, margin $nav-duration ease-out, opacity $nav-duration ease-out
+                transition: width $nav-duration ease-out, margin-inline $nav-duration ease-out, opacity $nav-duration ease-out
 
               .text
 
