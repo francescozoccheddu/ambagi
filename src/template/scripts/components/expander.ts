@@ -55,8 +55,6 @@ export class Expander {
       }
     }
     this.element.style.maxHeight = this.progress === 1 ? 'none' : `${(height * this.progress)}px`;
-    if (!this.expanded)
-      console.log(this.element.style.maxHeight);
     if (this.progress !== targetProgress && this.lastRequestTime === null) {
       this.lastRequestTime = now;
       requestAnimationFrame(() => {

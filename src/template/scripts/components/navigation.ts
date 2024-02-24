@@ -82,6 +82,23 @@ async function retrieve(page: Page): Promise<boolean> {
   return false;
 }
 
+function addOnClick(element: HTMLElement, onClick: () => void): void {
+  element.addEventListener('click', e => {
+    if (
+      e.ctrlKey ||
+      e.shiftKey ||
+      e.metaKey ||
+      (e.button && e.button == 1)
+    ) {
+      return false;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    onClick();
+    return true;
+  });
+}
+
 export function setupNavigation(): void {
   const pagesEl = document.getElementById('pages')!;
   const logoEl = document.getElementById('logo')!;
@@ -117,6 +134,7 @@ export function setupNavigation(): void {
       p.rootExpander.isExpanded = true;
     });
     setMeta(siteConf, null);
+    scrollToElement(logoEl);
   }
 
   function goTo(url: string): void {
@@ -149,22 +167,16 @@ export function setupNavigation(): void {
     goTo(getUrl());
   });
 
-  logoEl.addEventListener('click', e => {
-    e.preventDefault();
-    e.stopPropagation();
+  addOnClick(logoEl, () => {
     pushState(rootUrl);
     goTo(rootUrl);
-    return true;
   });
 
   pageEls.forEach(p => {
-    p.link.addEventListener('click', e => {
-      e.preventDefault();
-      e.stopPropagation();
+    addOnClick(p.link, () => {
       const pageConf = extractPageConf(p.root);
       pushState(pageConf.url);
       goTo(pageConf.url);
-      return true;
     });
   });
 }
