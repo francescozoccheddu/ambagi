@@ -10,7 +10,7 @@ type LayoutLocals = R<{
   res: BuildResourcesResult;
   text: TextLocal;
   siteConf: SiteConf;
-  pageConf: { [key in keyof PageConf]: PageConf[key] | Nul };
+  pageConf: { [key in keyof PageConf]: PageConf[key] | Und };
   pages: RArr<PageConfAndBody>;
   csp: Str;
 }>
@@ -52,14 +52,14 @@ export async function buildPage(buildConf: BuildPageConf): Promise<BuildPageResu
     text: buildConf.textLocal,
     siteConf: buildConf.siteConf,
     pageConf: pageConf ?? {
-      title: null,
-      url: null,
-      allowRobots: null,
-      date: null,
-      description: null,
-      keywords: null,
-      priority: null,
-      subtitle: null,
+      title: undefined,
+      url: undefined,
+      allowRobots: undefined,
+      date: undefined,
+      description: undefined,
+      keywords: undefined,
+      priority: undefined,
+      subtitle: undefined,
     },
     pages: buildConf.pages.map(c => c.conf.url === pageConf?.url
       ? buildConf.expandedPage!

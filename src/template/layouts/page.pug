@@ -1,5 +1,6 @@
 doctype html
 html(lang=siteConf.language)
+  - const sortedPages = pages.toSorted((a, b) => (a.conf.priority || 0) - (b.conf.priority || 0))
   head
     title #{(siteConf.title + " " + (pageConf.title || "")).trim()}
     meta(name="description" content=pageConf.description || siteConf.description || "")
@@ -30,10 +31,10 @@ html(lang=siteConf.language)
       header#header
         a(href='/')
           h1#logo #{text("logo", siteConf.title.toLowerCase())}
-      section#pages(class=pages.some(p => p.bodyHtml) && 'expanded')
+      section#pages(class=sortedPages.some(p => p.bodyHtml) && 'expanded' data-title=siteConf.title data-keywords=JSON.stringify(siteConf.keywords) data-description=siteConf.description)
         ul
-          each page in pages
-            li.page(class=page.bodyHtml && 'expanded' data-body-url=page.bodyUrl)
+          each page in sortedPages
+            li.page(class=page.bodyHtml && 'expanded' data-body-url=page.bodyUrl  data-title=page.conf.title data-keywords=JSON.stringify(siteConf.keywords) data-description=page.conf.description data-url=page.conf.url)
               header.header
                 a.link(href=page.conf.url)
                   .bullet

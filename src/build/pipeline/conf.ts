@@ -3,7 +3,7 @@ export type PageConf = R<{
   title: Str;
   keywords?: RArr<Str>;
   date?: Str | Nul;
-  priority?: Num | Nul;
+  priority?: Num;
   description?: Str | Nul;
   subtitle?: Str | Nul;
   allowRobots?: Bool;

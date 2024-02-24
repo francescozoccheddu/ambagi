@@ -39,16 +39,9 @@
       "default": null
     },
     "priority": {
-      "anyOf": [
-        {
-          "type": "number"
-        },
-        {
-          "type": "null"
-        }
-      ],
+      "type": "number",
       "description": "The optional page priority",
-      "default": null
+      "default": 0
     },
     "description": {
       "anyOf": [
