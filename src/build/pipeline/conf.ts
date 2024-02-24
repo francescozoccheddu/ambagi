@@ -6,7 +6,6 @@ export type PageConf = R<{
   priority?: Num | Nul;
   description?: Str | Nul;
   subtitle?: Str | Nul;
-  indexSubtitle?: Str | Nul;
   allowRobots?: Bool;
 }>
 

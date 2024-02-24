@@ -9,6 +9,7 @@ import { buildImage } from 'ambagi/tools/images';
 import { LayoutBuilder, makeLayoutBuilder } from 'ambagi/tools/layouts';
 import { extractVideoThumbnail, getVideoInfo } from 'ambagi/tools/videos';
 import { dirs } from 'ambagi/utils/dirs';
+import { dev } from 'ambagi/utils/env';
 import path from 'path';
 
 type LayoutLocals = R<{
@@ -44,6 +45,10 @@ export type BuildPageBodyResult = R<{
 
 export async function buildPageBody(buildConf: BuildPageBodyConf): Promise<BuildPageBodyResult> {
   log('Load conf');
+  if (dev) {
+    layoutBuilder = null;
+    bodyLoader = null;
+  }
   layoutBuilder ??= makeLayoutBuilder<LayoutLocals>(path.join(dirs.layouts, 'body.pug'));
   bodyLoader ??= makeXmlLoader<Body<true>>(path.join(dirs.schemas, 'body.xsd'), parseBodyXml);
   const assetsDir = path.join(buildConf.dir, 'assets');

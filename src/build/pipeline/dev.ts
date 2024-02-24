@@ -11,7 +11,7 @@ import koaStatic from 'koa-static';
 async function watch(): Promise<void> {
   const delay = 0.5;
   const koa = new Koa();
-  koa.use(koaStatic(dirs.dist));
+  koa.use(koaStatic(dirs.dist, { extensions: ['html'] }));
   const port = 5500;
   const server = koa.listen(port);
   await new Promise(resolve => {

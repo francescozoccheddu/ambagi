@@ -7,7 +7,7 @@
   "$defs": {
     "text": {
       "type": "string",
-      "pattern": "^[a-zA-Z\u00E0-\u00FC\u00C0-\u00DC!?=():;.,\\-+\/*%&$\"'\u20AC#@#_<>]+(( )[a-zA-Z\u00E0-\u00FC\u00C0-\u00DC!?=():;.,\\-+\/*%&$\"'\u20AC#@#_<>]+)*$"
+      "pattern": "^[a-zA-Z0-9\u00E0-\u00FC\u00C0-\u00DC!?=():;.,\\-+\/*%&$\"'\u20AC#@#_<>]+(( )[a-zA-Z0-9\u00E0-\u00FC\u00C0-\u00DC!?=():;.,\\-+\/*%&$\"'\u20AC#@#_<>]+)*$"
     }
   },
   "properties": {
@@ -72,18 +72,6 @@
         }
       ],
       "description": "The optional page subtitle",
-      "default": null
-    },
-    "indexSubtitle": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/text"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "The optional page subtitle to show in the index",
       "default": null
     },
     "keywords": {

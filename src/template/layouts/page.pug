@@ -28,12 +28,12 @@ html(lang=siteConf.language)
       header#header
         a(href='/')
           h1#logo #{text("logo", siteConf.title.toLowerCase())}
-      section#pages
+      section#pages(class=pages.some(p => p.bodyHtml) && 'expanded')
         ul
           each page in pages
-            li.page
+            li.page(class=page.bodyHtml && 'expanded')
               header.header
-                a.link(href=page.conf.url)
+                a.link(href=page.conf.url data-body-url=page.bodyUrl)
                   h2.title #{text("head", page.conf.title)}
                   if page.conf.subtitle
                     h3.subtitle #{text("subhead", page.conf.subtitle)}

@@ -1,5 +1,24 @@
-@use './breakpoints'
-@use './colors'
+@use '../base/breakpoints'
+@use '../base/colors'
+
+#pages
+  margin-bottom: 10rem
+
+  ul
+    list-style: none
+    padding: 0rem
+
+    .page
+      margin-block: 2.5rem
+      padding: 0rem
+
+      a
+        display: flex
+        flex-direction: row
+        gap: 1rem
+
+      .subtitle
+        margin-top: 0.15rem
 
 html
   scroll-behavior: smooth

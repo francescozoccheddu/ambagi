@@ -38,22 +38,23 @@ export async function buildSite(): Promise<void> {
   popLog();
   const pageDirents = fs.readdirSync(dirs.pages, { withFileTypes: true }).filter(dirent => dirent.isDirectory());
   const fontUsageCollector = makeFontUsageCollector(Object.keys(siteConf.resources.fonts));
-  const pages: RArr<Page> = await Promise.all(pageDirents.map(async (pageDirent) => {
+  const pages: Arr<Page> = [];
+  for (const pageDirent of pageDirents) {
     const dirname = pageDirent.name;
     pushLog(`Build body of page '${dirname}'`);
     log('Load config');
     const dir = path.join(pageDirent.path, dirname);
     const result = await buildPageBody({ dir, siteConf, resources, textLocal: fontUsageCollector.textLocal });
-    const conf = pageConfLoader!(path.join(dir, 'page.yml'));
+    const conf = pageConfLoader(path.join(dir, 'page.yml'));
     const bodyUrl = emitData(result.html, randomStaticName('.html'));
-    popLog();
-    return {
+    pages.push({
       bodyHtml: result.html,
       bodyUrl,
       conf,
       dirname,
-    };
-  }));
+    });
+    popLog();
+  }
   if (toSet(pages.map(p => p.conf.url)).size < pages.length) {
     err('Duplicate page url');
   }
@@ -72,17 +73,20 @@ export async function buildSite(): Promise<void> {
     const result = await buildPage({
       resources,
       siteConf,
-      pages: pages.map(p => p.conf.url === page.conf.url ? p : { ...p, bodyHtml: null }),
+      pages,
+      expandedPage: page,
       textLocal: fontUsageCollector.textLocal,
       csp,
     });
     emitData(result.html, `${page.conf.url}.html`);
+    popLog();
   }
   pushLog('Build index page');
   const indexResult = await buildPage({
     resources,
     siteConf,
-    pages: pages.map(p => ({ ...p, bodyHtml: null })),
+    pages,
+    expandedPage: null,
     textLocal: fontUsageCollector.textLocal,
     csp,
   });
