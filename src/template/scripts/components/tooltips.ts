@@ -1,9 +1,9 @@
 import { arrow, autoUpdate, computePosition, flip, hide as hideMw, limitShift, offset, shift } from '@floating-ui/dom';
 import { setupVideoLoading } from 'ambagi/components/videos';
 
-export function setupTooltips(root: HTMLElement = document.body): void {
+export function setupTooltips(root: HTMLElement): void {
   const links = Array.from(root.getElementsByClassName('footnote-link')) as HTMLElement[] as readonly HTMLElement[];
-  const footnotes = Array.from(root.getElementsByClassName('footnotes')[0]!.children) as HTMLElement[] as readonly HTMLElement[];
+  const footnotes = Array.from(root.getElementsByClassName('footnotes')[0]?.children ?? []) as HTMLElement[] as readonly HTMLElement[];
   for (const [i, link] of links.entries()) {
     const footnote = footnotes[i]!;
     const body = footnote.getElementsByClassName('footnote-body').item(0)! as HTMLElement;
