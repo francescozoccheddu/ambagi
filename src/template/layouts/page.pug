@@ -21,6 +21,8 @@ html(lang=siteConf.language)
     noscript 
       style #{res.styles.noscript.inline}
     style #{res.styles.noscript.inline}
+    script
+      | const __siteConf__ = !{JSON.stringify(siteConf)};
   body
     #loading
       #loading-content !{res.icons.loading.inline}
@@ -31,16 +33,19 @@ html(lang=siteConf.language)
       section#pages(class=pages.some(p => p.bodyHtml) && 'expanded')
         ul
           each page in pages
-            li.page(class=page.bodyHtml && 'expanded')
+            li.page(class=page.bodyHtml && 'expanded' data-body-url=page.bodyUrl)
               header.header
-                a.link(href=page.conf.url data-body-url=page.bodyUrl)
-                  h2.title #{text("head", page.conf.title)}
-                  if page.conf.subtitle
-                    h3.subtitle #{text("subhead", page.conf.subtitle)}
-                  if page.conf.date
-                    .date #{new Date(page.conf.date).toLocaleDateString("it-IT", { year: 'numeric', month: 'long', day: 'numeric' })}
-              if page.bodyHtml 
-                | !{page.bodyHtml}
+                a.link(href=page.conf.url)
+                  .bullet
+                  .text
+                    h2.title #{text("head", page.conf.title)}
+                    if page.conf.subtitle
+                      h3.subtitle #{text("subhead", page.conf.subtitle)}
+                    if page.conf.date
+                      .date #{text("bodyNorm", new Date(page.conf.date).toLocaleDateString("it-IT", { year: 'numeric', month: 'long', day: 'numeric' }))}
+              .body-holder
+                if page.bodyHtml 
+                  | !{page.bodyHtml}
       footer#footer
         #author #{text("logo", siteConf.author)}
   script(src=res.scripts.main.url)

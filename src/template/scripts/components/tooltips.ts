@@ -1,14 +1,14 @@
 import { arrow, autoUpdate, computePosition, flip, hide as hideMw, limitShift, offset, shift } from '@floating-ui/dom';
 import { setupVideoLoading } from 'ambagi/components/videos';
 
-export function setupTooltips(): void {
-  const links = Array.from(document.getElementsByClassName('footnote-link')) as HTMLElement[] as readonly HTMLElement[];
-  const footnotes = Array.from(document.getElementById('footnotes')!.children) as HTMLElement[] as readonly HTMLElement[];
+export function setupTooltips(root: HTMLElement = document.body): void {
+  const links = Array.from(root.getElementsByClassName('footnote-link')) as HTMLElement[] as readonly HTMLElement[];
+  const footnotes = Array.from(root.getElementsByClassName('footnotes')[0]!.children) as HTMLElement[] as readonly HTMLElement[];
   for (const [i, link] of links.entries()) {
     const footnote = footnotes[i]!;
     const body = footnote.getElementsByClassName('footnote-body').item(0)! as HTMLElement;
     const content = body.children[0]! as HTMLElement;
-    setupTooltip(link, content);
+    setupTooltip(link, content, root);
   }
 }
 
@@ -59,7 +59,7 @@ function setupTooltipContent(content: HTMLElement, hide: () => void): void {
   }
 }
 
-function setupTooltip(link: HTMLElement, content: HTMLElement): void {
+function setupTooltip(link: HTMLElement, content: HTMLElement, root: HTMLElement): void {
   let timer: ReturnType<typeof setTimeout> | null = null;
   let lastClickTime: number = 0;
   let finished: boolean = false;
@@ -161,7 +161,7 @@ function setupTooltip(link: HTMLElement, content: HTMLElement): void {
         tooltip: ttEl,
         cancelAutoUpdate: autoUpdate(link, ttEl, updatePosition),
       };
-      document.body.append(ttEl);
+      root.append(ttEl);
       setupTooltipContent(contentEl, () => {
         finished = true;
         hide();

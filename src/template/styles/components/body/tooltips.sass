@@ -9,99 +9,101 @@ $slideDuration: 0.2s
 $slideOffs: 0.15rem
 $slideOffsNeg: calc($slideOffs * -1)
 
-.tooltip
-  position: absolute
-  max-width: 400px
-  max-width: min(400px, calc(100vw - 3rem))
-  transition: opacity 0.3s linear
-  opacity: 0
+.body
 
-  &.show
-    transition: opacity 0.3s linear
-    opacity: 1
-
-  &.hovered
-    opacity: 1
-
-  .tooltip-arrow
+  .tooltip
     position: absolute
-    height: 0px
-    width: 0px
-    border-left: $arrowWidth solid transparent
-    border-right: $arrowWidth solid transparent
-    border-bottom: $arrowHeight solid colors.$ttip
+    max-width: 400px
+    max-width: min(400px, calc(100vw - 3rem))
+    transition: opacity 0.3s linear
+    opacity: 0
 
-  .tooltip-content
-    background: colors.$ttip
-    box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.25)
-    border-radius: 0.25rem
-    padding: 0.4rem
+    &.show
+      transition: opacity 0.3s linear
+      opacity: 1
 
-    p
-      margin: 0.7rem 0.9rem
+    &.hovered
+      opacity: 1
 
-    figure
-      margin: 0rem
-
-      video
-        max-width: 100%
-
-  &[data-placement="bottom"]
-    .tooltip-content
-      animation: slide-bottom $slideDuration ease-out
     .tooltip-arrow
-      rotate: 0deg
-      top: $arrowOffs
+      position: absolute
+      height: 0px
+      width: 0px
+      border-left: $arrowWidth solid transparent
+      border-right: $arrowWidth solid transparent
+      border-bottom: $arrowHeight solid colors.$ttip
 
-  &[data-placement="top"]
     .tooltip-content
-      animation: slide-top $slideDuration ease-out
-    .tooltip-arrow
-      rotate: 180deg
-      bottom: $arrowOffs
+      background: colors.$ttip
+      box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.25)
+      border-radius: 0.25rem
+      padding: 0.4rem
 
-  &[data-placement="left"]
-    .tooltip-content
-      animation: slide-left $slideDuration ease-out
-    .tooltip-arrow
-      rotate: 90deg
-      right: $arrowOffs
+      p
+        margin: 0.7rem 0.9rem
 
-  &[data-placement="right"]
-    .tooltip-content
-      animation: slide-right $slideDuration ease-out
-    .tooltip-arrow
-      rotate: 270deg
-      left: $arrowOffs
+      figure
+        margin: 0rem
 
-@keyframes slide-bottom
-  0%
-    opacity: $slideOpacity
-    translate: 0rem $slideOffsNeg
-  100%
-    opacity: 1
-    translate: 0rem 0rem
+        video
+          max-width: 100%
 
-@keyframes slide-top
-  0%
-    opacity: $slideOpacity
-    translate: 0rem $slideOffs
-  100%
-    opacity: 1
-    translate: 0rem 0rem
+    &[data-placement="bottom"]
+      .tooltip-content
+        animation: slide-bottom $slideDuration ease-out
+      .tooltip-arrow
+        rotate: 0deg
+        top: $arrowOffs
 
-@keyframes slide-left
-  0%
-    opacity: $slideOpacity
-    translate: $slideOffs 0rem
-  100%
-    opacity: 1
-    translate: 0rem 0rem
+    &[data-placement="top"]
+      .tooltip-content
+        animation: slide-top $slideDuration ease-out
+      .tooltip-arrow
+        rotate: 180deg
+        bottom: $arrowOffs
 
-@keyframes slide-right
-  0%
-    opacity: $slideOpacity
-    translate: $slideOffsNeg 0rem
-  100%
-    opacity: 1
-    translate: 0rem 0rem
+    &[data-placement="left"]
+      .tooltip-content
+        animation: slide-left $slideDuration ease-out
+      .tooltip-arrow
+        rotate: 90deg
+        right: $arrowOffs
+
+    &[data-placement="right"]
+      .tooltip-content
+        animation: slide-right $slideDuration ease-out
+      .tooltip-arrow
+        rotate: 270deg
+        left: $arrowOffs
+
+  @keyframes slide-bottom
+    0%
+      opacity: $slideOpacity
+      translate: 0rem $slideOffsNeg
+    100%
+      opacity: 1
+      translate: 0rem 0rem
+
+  @keyframes slide-top
+    0%
+      opacity: $slideOpacity
+      translate: 0rem $slideOffs
+    100%
+      opacity: 1
+      translate: 0rem 0rem
+
+  @keyframes slide-left
+    0%
+      opacity: $slideOpacity
+      translate: $slideOffs 0rem
+    100%
+      opacity: 1
+      translate: 0rem 0rem
+
+  @keyframes slide-right
+    0%
+      opacity: $slideOpacity
+      translate: $slideOffsNeg 0rem
+    100%
+      opacity: 1
+      translate: 0rem 0rem

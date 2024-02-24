@@ -1,81 +1,68 @@
 @use '../base/breakpoints'
 @use '../base/colors'
 
-blockquote
-  margin-block: 2rem
-  margin-inline: 1rem
-  padding-inline: 1rem
-  border-left: 0.5rem solid colors.$mut
-
-#body
+.body
   margin-block: 6rem
 
-@include breakpoints.lg
+  blockquote
+    margin-block: 2rem
+    margin-inline: 1rem
+    padding-inline: 1rem
+    border-left: 0.5rem solid colors.$mut
 
-  #body
+  .footnotes
     margin-block: 5rem
 
-@include breakpoints.md
+  .footnote
+    display: flex
+    flex-direction: row
+    gap: 0.6rem
+    padding: 1rem 2rem 1rem 0rem
+    border-radius: 0.25rem
+    transition: background-color 1s ease
 
-  #body
+    &:target
+      scroll-margin-top: 2rem
+      background-color: colors.$fnbg
+
+  .footnote-head
+    width: 1.5rem
+    text-align: right
+
+  .footnote-body
+    flex: 1 0 0
+
+    p, figure
+      margin: 0rem
+
+    figure
+      width: 50%
+
+  .credits
+    margin: 2rem
+
+    .credit
+      margin-block: 0.7rem
+
+  @include breakpoints.lg
     margin-block: 5rem
 
-@include breakpoints.sm
+  @include breakpoints.md
+    margin-block: 5rem
 
-  #body
+  @include breakpoints.sm
     margin-block: 4.5rem
 
-@include breakpoints.xs
+    .footnote-body
+      figure
+        width: 75%
 
-  #body
+  @include breakpoints.xs
     margin-block: 4rem
 
-  blockquote
-    margin-inline: 0.5rem
+    blockquote
+      margin-inline: 0.5rem
 
-#footnotes
-  margin-block: 5rem
-
-.footnote
-  display: flex
-  flex-direction: row
-  gap: 0.6rem
-  padding: 1rem 2rem 1rem 0rem
-  border-radius: 0.25rem
-  transition: background-color 1s ease
-
-  &:target
-    scroll-margin-top: 2rem
-    background-color: colors.$fnbg
-
-.footnote-head
-  width: 1.5rem
-  text-align: right
-
-.footnote-body
-  flex: 1 0 0
-
-  p, figure
-    margin: 0rem
-
-  figure
-    width: 50%
-
-#credits
-  margin: 2rem
-
-  .credit
-    margin-block: 0.7rem
-
-#author
-  margin-block: 5rem 4rem
-
-@include breakpoints.sm
-  .footnote-body
-    figure
-      width: 75%
-
-@include breakpoints.xs
-  .footnote-body
-    figure
-      width: 100%
+    .footnote-body
+      figure
+        width: 100%

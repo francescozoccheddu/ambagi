@@ -1,36 +1,37 @@
+.body
 
-.video-holder
-  position: relative
+  .video-holder
+    position: relative
 
-  video
-    transition: opacity 0.4s
-    opacity: 0
-
-  .video-loading-icon
-    position: absolute
-    left: 0
-    right: 0
-    top: 0
-    bottom: 0
-    width: 1.5rem
-    height: 1.5rem
-    margin: auto
-    opacity: 0
-    animation: fade-in-video-loading-icon 0.5s linear 0s 1 normal forwards
-
-  &.can-play
     video
-      opacity: 1
+      transition: opacity 0.4s
+      opacity: 0
 
     .video-loading-icon
-      animation: fade-out-video-loading-icon 0.4s linear 0s 1 normal forwards
+      position: absolute
+      left: 0
+      right: 0
+      top: 0
+      bottom: 0
+      width: 1.5rem
+      height: 1.5rem
+      margin: auto
+      opacity: 0
+      animation: fade-in-video-loading-icon 0.5s linear 0s 1 normal forwards
 
-@keyframes fade-in-video-loading-icon
-  0%
-    opacity: 0
-  100%
-    opacity: 1
+    &.can-play
+      video
+        opacity: 1
 
-@keyframes fade-out-video-loading-icon
-  100%
-    opacity: 0
+      .video-loading-icon
+        animation: fade-out-video-loading-icon 0.4s linear 0s 1 normal forwards
+
+  @keyframes fade-in-video-loading-icon
+    0%
+      opacity: 0
+    100%
+      opacity: 1
+
+  @keyframes fade-out-video-loading-icon
+    100%
+      opacity: 0

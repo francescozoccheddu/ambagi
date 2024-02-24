@@ -20,7 +20,6 @@ $loading-fade-duration: 1s
 
 #main
   opacity: 0
-  display: none
   animation-delay: $loading-fade-duration
   animation-play-state: paused
   animation-name: fade-in-main
@@ -59,17 +58,15 @@ $loading-fade-duration: 1s
 
 body
   pointer-events: none
-  overflow: hidden
-  scrollbar-gutter: stable both-edges
+  position: fixed
 
   &.faded-in, &.fading-in
     pointer-events: auto
-    overflow-y: scroll
+    position: static
 
   &.loaded
 
     #main
-      display: flex
       animation-play-state: running
 
     #loading

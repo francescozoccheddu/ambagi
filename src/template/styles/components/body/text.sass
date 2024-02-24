@@ -2,32 +2,32 @@
 @use "../base/colors"
 @use "../base/fonts"
 
-.tooltip
-  color: colors.$key
-  font-family: fonts.$body-norm
-  font-size: 0.8rem
-  line-height: 1.4
-  text-align: justify
-
-em
-  font-family: fonts.$body-emph
-
-#body
+.body
   line-height: 1.65
   text-align: justify
 
-#footnotes
-  font-size: 0.8rem
-  line-height: 1.65
-  text-align: justify
+  .tooltip
+    color: colors.$key
+    font-family: fonts.$body-norm
+    font-size: 0.8rem
+    line-height: 1.4
+    text-align: justify
 
-#credits
-  line-height: 1.65
-  font-size: 0.6rem
-  color: colors.$mut
-  text-align: justify
+  em
+    font-family: fonts.$body-emph
 
-figcaption
-  font-size: 0.7rem
-  color: colors.$mut
-  text-align: center
+  .footnotes
+    font-size: 0.8rem
+    line-height: 1.65
+    text-align: justify
+
+  .credits
+    line-height: 1.65
+    font-size: 0.6rem
+    color: colors.$mut
+    text-align: justify
+
+  figcaption
+    font-size: 0.7rem
+    color: colors.$mut
+    text-align: center
