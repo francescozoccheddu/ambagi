@@ -34,7 +34,7 @@ html(lang=siteConf.language)
       section#pages(class=sortedPages.some(p => p.bodyHtml) && 'expanded' data-title=siteConf.title data-keywords=JSON.stringify(siteConf.keywords) data-description=siteConf.description)
         ul
           each page in sortedPages
-            li.page(class=page.bodyHtml && 'expanded' data-body-url=page.bodyUrl  data-title=page.conf.title data-keywords=JSON.stringify(siteConf.keywords) data-description=page.conf.description data-url=page.conf.url)
+            li.page(class=page.bodyHtml && 'expanded' style={ 'max-height': !page.bodyHtml && sortedPages.some(p => p.bodyHtml) ? '0px' : 'none' } data-body-url=page.bodyUrl  data-title=page.conf.title data-keywords=JSON.stringify(siteConf.keywords) data-description=page.conf.description data-url=page.conf.url)
               header.header
                 a.link(href=page.conf.url)
                   .bullet
@@ -44,7 +44,7 @@ html(lang=siteConf.language)
                       h3.subtitle #{text("subhead", page.conf.subtitle)}
                     if page.conf.date
                       .date #{text("bodyNorm", new Date(page.conf.date).toLocaleDateString("it-IT", { year: 'numeric', month: 'long', day: 'numeric' }))}
-              .body-holder
+              .body-holder(style={ 'max-height': page.bodyHtml ? 'none' : '0px' })
                 if page.bodyHtml 
                   | !{page.bodyHtml}
       footer#footer

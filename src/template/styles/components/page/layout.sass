@@ -1,6 +1,8 @@
 @use '../base/breakpoints'
 @use '../base/colors'
 
+$nav-duration: 0.5s
+
 html, body
   scroll-behavior: smooth
   padding: 0rem
@@ -44,6 +46,7 @@ body
     #pages
       flex: 1 0 auto
       margin-block: 3rem 10rem
+      transition: margin $nav-duration ease
 
       ul
         list-style: none
@@ -53,6 +56,7 @@ body
         .page
           padding: 0rem
           margin-block: 1.5rem
+          transition: margin $nav-duration ease
 
           .header
             display: inline-block
@@ -66,11 +70,12 @@ body
                 height: 0.24rem
                 margin-inline: 1rem
                 background-color: colors.$key
+                transition: width $nav-duration ease, margin $nav-duration ease, opacity $nav-duration ease
 
               .text
 
                 .title, .subtitle, .date
-                  transition: font-size 0.1s ease, margin 0.1s ease
+                  transition: font-size $nav-duration ease, margin $nav-duration ease
 
                 .title
                   margin-block: 0.1rem
@@ -80,6 +85,9 @@ body
 
                 .date
                   margin-block: 0.15rem
+
+          .body-holder
+            overflow: hidden
 
           &.expanded
             margin-top: 0rem
@@ -92,6 +100,7 @@ body
                 .bullet
                   width: 0rem
                   margin-inline: 0rem
+                  opacity: 0
 
                 .text
 
@@ -105,7 +114,16 @@ body
                     margin-block: 0.2rem
 
       &.expanded
-        margin-top: 0rem
+        margin-block: 0rem 2rem
+
+        .page
+          pointer-events: none
+          opacity: 0
+          margin: 0rem
+
+          &.expanded
+            pointer-events: all
+            opacity: 1
 
     #footer
       flex: 0 0 auto

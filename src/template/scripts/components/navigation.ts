@@ -1,7 +1,11 @@
+import { Expander } from 'ambagi/components/expander';
+
 type PageElements = Readonly<{
   root: HTMLElement;
+  rootExpander: Expander;
   link: HTMLAnchorElement;
   bodyHolder: HTMLDivElement;
+  bodyHolderExpander: Expander;
 }>
 
 type SiteConf = Readonly<{
@@ -48,25 +52,34 @@ function setMeta(siteConf: SiteConf, pageConf: PageConf | null): void {
   head.querySelector('meta[name="keywords"]')!.setAttribute('content', [...(pageConf?.keywords || []), ...(siteConf.keywords || [])].join(', '));
 }
 
-const stateKey = '__ambagi_navigation_url__';
 const rootUrl = '/';
 
-function createState(url: string): object {
-  return { [stateKey]: url };
-}
-
-function getStateUrl(state: unknown): string | null {
-  return typeof state === 'object' && state && stateKey in state ? state[stateKey] as string : null;
+function getUrl(): string {
+  const segments = window.location.pathname.split('/');
+  return segments[segments.length - 1] ?? rootUrl;
 }
 
 export function setupNavigation(): void {
   const pagesEl = document.getElementById('pages')!;
   const logoEl = document.getElementById('logo')!;
-  const pageEls: readonly PageElements[] = Array.from(pagesEl.getElementsByClassName('page')).map(el => ({
-    root: el as HTMLElement,
-    link: el.getElementsByClassName('link')[0]! as HTMLAnchorElement,
-    bodyHolder: el.getElementsByClassName('body-holder')[0]! as HTMLDivElement,
-  }));
+  const pageEls: readonly PageElements[] = Array.from(pagesEl.getElementsByClassName('page')).map(el => {
+    const bodyHolder = el.getElementsByClassName('body-holder')[0]! as HTMLDivElement;
+    const root = el as HTMLElement;
+    const link = el.getElementsByClassName('link')[0]! as HTMLAnchorElement;
+    const hasSomeExpanded = pagesEl.classList.contains('expanded');
+    const expanded = root.classList.contains('expanded');
+    const rootExpander = new Expander(root, !hasSomeExpanded || expanded);
+    rootExpander.duration = 0.25;
+    const bodyHolderExpander = new Expander(bodyHolder, expanded);
+    bodyHolderExpander.duration = 5;
+    return {
+      root,
+      rootExpander,
+      link,
+      bodyHolder,
+      bodyHolderExpander,
+    };
+  });
   const siteConf = extractSiteConf(pagesEl);
   const pages: readonly Page[] = pageEls.map(p => ({ conf: extractPageConf(p.root), elements: p }));
 
@@ -74,36 +87,42 @@ export function setupNavigation(): void {
     pagesEl.classList.remove('expanded');
     pageEls.forEach(p => {
       p.bodyHolder.innerHTML = '';
+      p.bodyHolderExpander.isExpanded = false;
       p.root.classList.remove('expanded');
+      p.rootExpander.isExpanded = true;
     });
     setMeta(siteConf, null);
   }
 
   function goTo(url: string): void {
-    reset();
-    if (url !== rootUrl) {
-      const page = pages.find(p => p.conf.url === url)!;
-      void fetch(page.conf.bodyUrl).then(res => {
-        void res.text().then(html => {
-          console.log(window.history.state, getStateUrl(window.history.state));
-          if (getStateUrl(window.history.state) === url) {
-            pagesEl.classList.add('expanded');
-            page.elements.root.classList.add('expanded');
-            page.elements.bodyHolder.innerHTML = html;
-            setMeta(siteConf, page.conf);
-          }
+    const page = url === rootUrl ? null : pages.find(p => p.conf.url === url)!;
+    if (!page?.elements.root.classList.contains('expanded')) {
+      reset();
+      if (page) {
+        void fetch(page.conf.bodyUrl).then(res => {
+          void res.text().then(html => {
+            if (getUrl() === url) {
+              pageEls.forEach(p => {
+                p.rootExpander.isExpanded = false;
+              });
+              pagesEl.classList.add('expanded');
+              page.elements.root.classList.add('expanded');
+              page.elements.bodyHolder.innerHTML = html;
+              page.elements.bodyHolderExpander.isExpanded = true;
+              setMeta(siteConf, page.conf);
+            }
+          });
         });
-      });
+      }
     }
   }
 
   function pushState(url: string): void {
-    window.history.pushState(createState(url), '', url);
+    window.history.pushState({}, '', url);
   }
 
-  window.addEventListener('popstate', e => {
-    const url = getStateUrl(e.state) ?? rootUrl;
-    goTo(url);
+  window.addEventListener('popstate', () => {
+    goTo(getUrl());
   });
 
   logoEl.addEventListener('click', e => {
