@@ -45,7 +45,7 @@ body
         margin-top: 3rem
 
       @include breakpoints.xs
-        margin-top: 1.75rem
+        margin-top: 1.25rem
 
     #pages
       flex: 1 0 auto
@@ -66,42 +66,97 @@ body
 
           .header
             display: inline-block
+            transition: margin $nav-duration ease-out
 
             .link
-              display: flex
-              align-items: flex-start
+              display: grid
+              grid-template-rows: auto auto auto
+              grid-template-columns: auto 1fr
+              align-items: center
 
               .bullet
-                margin-top: 0.92rem
-                width: 0.9rem
+                grid-row: 1
+                grid-column: 1
+                flex: 0 0 auto
+                width: 0.85rem
                 height: 0.24rem
                 margin-inline: 1rem
                 background-color: colors.$key
                 transition: width $nav-duration ease-out, margin-inline $nav-duration ease-out, opacity $nav-duration ease-out
 
-              .text
+                @include breakpoints.lg
+                  width: 0.84rem
 
-                .title, .subtitle, .date
-                  transition: font-size $nav-duration ease-out, margin $nav-duration ease-out
+                @include breakpoints.md
+                  width: 0.83rem
 
-                .title
-                  margin-block: 0.1rem
+                @include breakpoints.sm
+                  width: 0.8rem
 
-                .subtitle
-                  margin-block: 0.1rem
+                @include breakpoints.xs
+                  width: 0.75rem
+                  margin-inline: 0.75rem
 
-                .date
-                  margin-block: 0.15rem
+              .title
+                grid-row: 1
+                grid-column: 2
+
+              .subtitle
+                grid-row: 2
+                grid-column: 2
+
+              .date
+                grid-row: 3
+                grid-column: 2
+
+              .title, .subtitle, .date
+                transition: font-size $nav-duration ease-out, margin $nav-duration ease-out
+
+              .title, .subtitle
+                margin-block: 0.175rem
+
+                @include breakpoints.sm
+                  margin-block: 0.2rem
+
+                @include breakpoints.xs
+                  margin-block: 0.225rem
+
+              .date
+                margin-block: 0.45rem
 
               &:hover
 
                 .bullet
                   width: 0.75rem
 
+                  @include breakpoints.lg
+                    width: 0.74rem
+
+                  @include breakpoints.md
+                    width: 0.73rem
+
+                  @include breakpoints.sm
+                    width: 0.7rem
+
+                  @include breakpoints.xs
+                    width: 0.65rem
+
               &:active
 
                 .bullet
                   width: 0.5rem
+
+                  @include breakpoints.lg
+                    width: 0.49rem
+
+                  @include breakpoints.md
+                    width: 0.48rem
+
+                  @include breakpoints.sm
+                    width: 0.45rem
+
+                  @include breakpoints.xs
+                    width: 0.4rem
 
           .body-holder
             opacity: 0
@@ -111,6 +166,7 @@ body
             margin-top: 0rem
 
             .header
+              margin-top: 0.1rem
 
               .link
                 pointer-events: none
@@ -121,16 +177,17 @@ body
                   margin-inline: 0rem
                   opacity: 0
 
-                .text
+                .title, .subtitle
+                  margin-block: 0.25rem
 
-                  .title
-                    margin-block: 0.2rem
+                  @include breakpoints.sm
+                    margin-block: 0.3rem
 
-                  .subtitle
-                    margin-block: 0.2rem
+                  @include breakpoints.xs
+                    margin-block: 0.35rem
 
-                  .date
-                    margin-block: 0.2rem
+                .date
+                  margin-top: 0.6rem
 
             .body-holder
               opacity: 1
@@ -147,9 +204,21 @@ body
             pointer-events: all
             opacity: 1
 
+      @include breakpoints.lg
+        margin-block: 2.9rem 9.5rem
+
+      @include breakpoints.md
+        margin-block: 2.8rem 9rem
+
+      @include breakpoints.sm
+        margin-block: 2.7rem 8.5rem
+
+      @include breakpoints.xs
+        margin-block: 2rem 8rem
+
     #footer
       flex: 0 0 auto
-      margin-block: 3rem 9rem
+      margin-block: 3rem 8rem
 
       @include breakpoints.sm
         margin-bottom: 7rem

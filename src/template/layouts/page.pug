@@ -37,12 +37,12 @@ html(lang=siteConf.language)
               header.header
                 a.link(href=page.conf.url)
                   .bullet
-                  .text
-                    h2.title #{text("head", page.conf.title)}
-                    if page.conf.subtitle
-                      h3.subtitle #{text("subhead", page.conf.subtitle)}
-                    if page.conf.date
-                      .date #{text("bodyNorm", new Date(page.conf.date).toLocaleDateString("it-IT", { year: 'numeric', month: 'long', day: 'numeric' }))}
+                    .stroke
+                  h2.title #{text("head", page.conf.title)}
+                  if page.conf.subtitle
+                    h3.subtitle #{text("subhead", page.conf.subtitle)}
+                  if page.conf.date
+                    .date #{text("bodyNorm", new Date(page.conf.date).toLocaleDateString("it-IT", { year: 'numeric', month: 'long', day: 'numeric' }))}
               .body-holder(style={ 'max-height': page.bodyHtml ? 'none' : '0px' })
                 if page.bodyHtml 
                   | !{page.bodyHtml}
