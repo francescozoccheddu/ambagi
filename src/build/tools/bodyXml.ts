@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-named-as-default
 import { err } from '@francescozoccheddu/ts-goodies/errors';
 import { isUnd } from '@francescozoccheddu/ts-goodies/types';
-import { Body, BodyCredit, BodyElementKind, BodyFootnote, BodyFootnoteLink, BodyImage, BodyMediaBox, BodyMediaSource, BodyMediaSourceInfo, BodyParagraph, BodyParagraphFormat, BodySpan, BodySpanFormat, BodyVideo } from 'ambagi/pipeline/body';
+import { Body, BodyCredit, BodyElementKind, BodyFootnote, BodyFootnoteLink, BodyImage, BodyLine, BodyMediaBox, BodyMediaSource, BodyMediaSourceInfo, BodyParagraph, BodyParagraphFormat, BodySpan, BodySpanFormat, BodyVideo } from 'ambagi/pipeline/body';
 import { Element as XmlElement } from 'xml-js';
 
 function toFloatOrNul(str: Str | Nul): Num | Nul {
@@ -71,6 +71,11 @@ function visitEl(el: XmlElement | Und): Unk {
             children: els.map(visitEl),
             format: el.name === 'quote' ? BodyParagraphFormat.quote : BodyParagraphFormat.normal,
             kind: BodyElementKind.paragraph,
+          };
+        case 'line':
+          return <BodyLine>{
+            children: els.map(visitEl),
+            kind: BodyElementKind.line,
           };
         case 'e':
           return <BodySpan>{

@@ -1,6 +1,9 @@
 mixin run(children)
   each ch in children
     case ch.kind
+      when "line"
+        span.line
+          +run(ch.children)
       when "span"
         case ch.format
           when "normal"

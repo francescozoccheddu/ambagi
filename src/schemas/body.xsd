@@ -78,11 +78,15 @@
 
   <xs:complexType name="paragraph" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element name="fn">
-        <xs:complexType>
-          <xs:attribute name="key" type="am:footnote-key-string" use="required" />
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="line" type="am:line" />
+      <xs:element name="fn" type="am:footnote-link" />
+      <xs:element name="e" type="am:non-empty-string" />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="line" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="fn" type="am:footnote-link" />
       <xs:element name="e" type="am:non-empty-string" />
     </xs:choice>
   </xs:complexType>
@@ -93,6 +97,10 @@
       <xs:maxInclusive value="1" />
     </xs:restriction>
   </xs:simpleType>
+
+  <xs:complexType name="footnote-link" mixed="true">
+    <xs:attribute name="key" type="am:footnote-key-string" use="required" />
+  </xs:complexType>
 
   <xs:complexType name="text" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">

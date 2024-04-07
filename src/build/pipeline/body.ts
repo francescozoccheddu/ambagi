@@ -32,6 +32,7 @@ export enum BodyElementKind {
   mediaBox = 'mediaBox',
   video = 'video',
   image = 'image',
+  line = 'line'
 }
 
 export enum BodySpanFormat {
@@ -53,9 +54,17 @@ export enum BodyParagraphFormat {
   quote = 'quote'
 }
 
-export type BodyParagraphChild =
+export type BodyLineChild =
   BodyFootnoteLink |
   BodySpan
+
+export type BodyLine = R<{
+  children: RArr<BodyLineChild>;
+}> & Kind<BodyElementKind.line>
+
+export type BodyParagraphChild =
+  BodyLineChild |
+  BodyLine
 
 export type BodyParagraph = R<{
   children: RArr<BodyParagraphChild>;
