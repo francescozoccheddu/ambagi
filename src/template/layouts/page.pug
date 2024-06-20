@@ -26,17 +26,18 @@ html(lang=siteConf.language)
   body
     #loading
       #loading-content !{res.icons.loading.inline}
-    main#main(role="main")
+    main#main(role="main" class=sortedPages.some(p => p.bodyHtml) && 'started-expanded')
       header#header
         a(href='/')
           h1#logo #{text("logo", siteConf.title.toLowerCase())}
       section#pages(class=sortedPages.some(p => p.bodyHtml) && 'expanded' data-title=siteConf.title data-keywords=JSON.stringify(siteConf.keywords) data-description=siteConf.description)
         ul
-          each page in sortedPages
+          each page, i in sortedPages
+            - const delay = `${(i + 1) * 0.1}s`
             li.page(class=page.bodyHtml && 'expanded' style={ 'max-height': !page.bodyHtml && sortedPages.some(p => p.bodyHtml) ? '0px' : 'none' } data-body-url=page.bodyUrl  data-title=page.conf.title data-keywords=JSON.stringify(siteConf.keywords) data-description=page.conf.description data-url=page.conf.url)
-              header.header
+              header.header(style={ 'animation-delay': delay })
                 a.link(href=page.conf.url)
-                  .bullet
+                  .bullet(style={ 'animation-delay': delay })
                     .stroke
                   h2.title #{text("head", page.conf.title)}
                   if page.conf.subtitle

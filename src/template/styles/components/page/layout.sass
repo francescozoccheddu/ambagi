@@ -67,6 +67,11 @@ body
           .header
             display: inline-block
             transition: margin $nav-duration ease-out
+            animation-name: header-in
+            animation-duration: 1s
+            animation-fill-mode: backwards
+            animation-timing-function: ease-out
+            animation-play-state: paused
 
             .link
               display: grid
@@ -83,6 +88,11 @@ body
                 margin-inline: 1rem
                 background-color: colors.$key
                 transition: width $nav-duration ease-out, margin-inline $nav-duration ease-out, opacity $nav-duration ease-out
+                animation-name: bullet-in
+                animation-duration: 1s
+                animation-fill-mode: backwards
+                animation-timing-function: ease-out
+                animation-play-state: paused
 
                 @include breakpoints.lg
                   width: 0.84rem
@@ -216,6 +226,14 @@ body
       @include breakpoints.xs
         margin-block: 2rem 8rem
 
+    &.started-expanded
+
+      #pages ul .page .header
+        animation-name: none
+
+        .link .bullet
+          animation-name: none
+
     #footer
       flex: 0 0 auto
       margin-block: 3rem 8rem
@@ -240,3 +258,15 @@ body
 
   a:target
     scroll-margin-top: 2rem
+
+@keyframes bullet-in
+  0%
+    max-width: 0rem
+  100%
+    max-width: 0.85rem
+
+@keyframes header-in
+  0%
+    opacity: 0
+  100%
+    opacity: 1
