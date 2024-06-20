@@ -30,10 +30,12 @@ body
     width: 1100px
     display: flex
     flex-direction: column
+    transition: width 0.1s ease-out
 
     #header
       flex: 0 0 auto
       margin-top: 4rem
+      transition: margin 0.1s ease-out
 
       #logo
         margin-bottom: -0.25rem
@@ -124,6 +126,7 @@ body
 
               .title, .subtitle
                 margin-block: 0.175rem
+                transition: margin 0.1s ease-out
 
                 @include breakpoints.sm
                   margin-block: 0.2rem
@@ -237,6 +240,7 @@ body
     #footer
       flex: 0 0 auto
       margin-block: 3rem 8rem
+      transition: margin 0.1s ease-out
 
       @include breakpoints.sm
         margin-bottom: 7rem
