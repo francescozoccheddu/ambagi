@@ -2,6 +2,7 @@
 @use '../base/colors'
 
 $nav-duration: 0.25s
+$min-width: 320px
 
 *
   box-sizing: border-box
@@ -23,6 +24,10 @@ body
   flex-direction: column
   align-items: center
   justify-content: stretch
+  min-width: $min-width
+
+  @media (max-width: $min-width)
+    overflow-x: auto
 
   #main
     flex: 1 0 auto
@@ -126,7 +131,6 @@ body
 
               .title, .subtitle
                 margin-block: 0.175rem
-                transition: margin 0.1s ease-out
 
                 @include breakpoints.sm
                   margin-block: 0.2rem
