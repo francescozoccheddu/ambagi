@@ -44,7 +44,7 @@ export async function buildStyle(sourceFile: Str, urlMapper: StyleUrlMapper | Nu
     ]),
     cssnanoPlugin({
       preset: cssnanoPreset({
-        autoprefixer: false,
+        autoprefixer: undefined,
       }),
     }),
   ])

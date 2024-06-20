@@ -1,7 +1,5 @@
-// eslint-disable-next-line import/no-named-as-default
 import { err } from '@francescozoccheddu/ts-goodies/errors';
-import Ajv from 'ajv';
-// eslint-disable-next-line import/no-named-as-default
+import { Ajv } from 'ajv';
 import fs from 'fs';
 import yaml from 'js-yaml';
 import { parseXml as libxmlParseXml } from 'libxmljs';
